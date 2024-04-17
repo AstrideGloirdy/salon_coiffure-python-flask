@@ -1,0 +1,127 @@
+{% extends "layouts/base.html" %}
+<!-- Lister clients  -->
+{% block content %}
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
+  <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-body d-flex align-items-center">
+                    <h4 class="card-title flex-grow-1">Liste des differents types d'abonnement</h4>
+                    <a href="{{ url_for('gestionnaire.AddTypeAbonnement') }}" class="btn btn-info ml-auto">Nouveau</a>
+                </div>
+                <!-- -->
+              <div class="row">
+                {% for abonnement in abonnements %}
+                <div class="col-lg-4 col-md-4 d-flex mb-2 mt-0">
+                  <div class="typeAbocards">
+                    <article class="typeAboplan [ card ]">
+                      <div class="typeAboinner">
+                        <span class="typeAbopricing">
+                          <span>
+                             <small>$</small>
+                          </span>
+                        </span>
+                        <h2 class="typeAbotitle">{{ abonnement.nomTypeAbonnement }}</h2>
+                        <p class="typeAboinfo">Ce plan vous aide à payer vos coiffures à prix reduit pendant un mois</p>
+                        <ul class="typeAbofeatures">
+                          <li>
+                            <span class="typeAboicon">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path fill="none" d="M0 0h24v24H0z" />
+                                <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z" fill="currentColor" />
+                              </svg>
+                            </span>
+                            <span><strong>Réduction : {{ abonnement.taux_reduction }}%</strong></span>
+                          </li>
+                          <li>
+                            <span class="typeAboicon">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path fill="none" d="M0 0h24v24H0z" />
+                                <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z" fill="currentColor" />
+                              </svg>
+                            </span>
+                            <span><strong>Coiffures incluses : {{ abonnement.nombre_coiffures_incluses }}</strong></span>
+                          </li>
+                          <li>
+                            <span class="typeAboicon">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path fill="none" d="M0 0h24v24H0z" />
+                                <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z" fill="currentColor" />
+                              </svg>
+                            </span>
+                            <span><strong>Coiffures restantes : {{ abonnement.nombre_coiffures_restantes }}</strong></span>
+                          </li>
+                        </ul>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+                <!-- <div class="row">
+                  {% for abonnement in abonnements %}
+                  <div class="col-lg-4 col-md-4 d-flex mb-4">
+                      <div class="card" style="border-width: 5px; border-style: solid;
+                       border-radius: 10px; border-color: rgb(112, 12, 142);">
+                          <div class="card-header text-white small" style="background-color: antiquewhite; font-size: x-small; border-bottom: 20px;">
+                              <h5 class="card-title " style="font-size: small; ">{{ abonnement.nomTypeAbonnement }}</h5>
+                          </div>
+                          <div class="card-body">
+                              <h6 class="card-subtitle mb-2">Abonnement Mensuel</h6>
+                              <ul class="list-group list-group-flush small">
+                                  <li class="list-group-item rounded">Taux de réduction : {{ abonnement.taux_reduction }}%</li>
+                                  <li class="list-group-item rounded">Nombre de coiffures incluses : {{ abonnement.nombre_coiffures_incluses }}</li>
+                                  <li class="list-group-item rounded">Nombre de coiffures restantes : {{ abonnement.nombre_coiffures_restantes }}</li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  {% endfor %}
+                </div> -->
+                
+                <nav aria-label="Page navigation example mt-4">
+                  <ul class="pagination">
+                    {% if abonnements.has_prev %}
+                      <li class="page-item"><a class="page-link" href="{{ url_for('gestionnaire.ListTypeAbonnement', page=abonnements.prev_num) }}">Previous</a></li>
+                    {% else %}
+                      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    {% endif %}
+                
+                    {% for page_num in abonnements.iter_pages() %}
+                      {% if page_num %}
+                        {% if abonnements.page == page_num %}
+                          <li class="page-item active" aria-current="page"><span class="page-link">{{ page_num }}</span></li>
+                        {% else %}
+                          <li class="page-item"><a class="page-link" href="{{ url_for('gestionnaire.ListTypeAbonnement', page=page_num) }}">{{ page_num }}</a></li>
+                        {% endif %}
+                      {% else %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                      {% endif %}
+                    {% endfor %}
+                
+                    {% if abonnements.has_next %}
+                      <li class="page-item"><a class="page-link" href="{{ url_for('gestionnaire.ListTypeAbonnement', page=abonnements.next_num) }}">Next</a></li>
+                    {% else %}
+                      <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    {% endif %}
+                  </ul>
+              </nav> 
+                
+                
+            </div>
+        </div>
+      </div>  
+  </div>
+
+  {% block javascript %}
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+      
+  {% endblock %}
+
+
+{% endblock %}
+
+    
+    

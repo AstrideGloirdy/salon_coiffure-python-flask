@@ -1,0 +1,44 @@
+/*------------------------------------------------------------------
+    Price table  
+-------------------------------------------------------------------*/
+
+.price_table table.table {
+    margin: 0;
+}
+
+.payment_option {
+    list-style: none;
+    float: left;
+    width: 100%;
+}
+
+.payment_option li {
+    display: inline;
+    float: left;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.price_table table th {
+    font-weight: 500;
+}
+
+.price_table table th,
+.price_table table td {
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #666;
+    vertical-align: middle;
+}
+
+p.note_cont {
+    float: left;
+    width: 100%;
+    border: solid #1ed085 1px;
+    padding: 11px 20px;
+    border-radius: 3px;
+    color: #1ed085;
+    background: rgba(30, 208, 133, 0.05);
+    margin-top: 15px;
+}
