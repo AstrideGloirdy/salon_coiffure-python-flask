@@ -74,3 +74,46 @@ Cette extension permet de prendre en compte le paiement lors de la souscription 
   </div>
   {% endfor %}
 </div>
+
+
+
+_________________________
+
+from flask import render_template, url_for, redirect, flash
+from .forms import AddAbonnementForm
+from .models import Abonnement
+from flask_weasyprint import HTML, render_pdf
+
+@gestionnaire.route('/abonnement/details/<int:abonnement_id>', methods=['GET'])
+def abonnement_details(abonnement_id):
+    abonnement = Abonnement.query.get_or_404(abonnement_id)
+    return render_template('gestionnaire/abonnement_details.html', abonnement=abonnement)
+
+@gestionnaire.route('/abonnement/details/<int:abonnement_id>/print', methods=['GET'])
+def print_abonnement(abonnement_id):
+    abonnement = Abonnement.query.get_or_404(abonnement_id)
+    rendered_html = render_template('gestionnaire/abonnement_details.html', abonnement=abonnement)
+    return render_pdf(HTML(string=rendered_html))
+
+
+______________
+
+class Facture(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+    montant_total = db.Column(db.Float)
+    date = db.Column(db.Date)
+    # Ajoutez d'autres champs selon vos besoins
+class VenteProduit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    produit_id = db.Column(db.Integer, db.ForeignKey('produit.id'))
+    quantite = db.Column(db.Integer)
+    montant_total = db.Column(db.Float)
+    date = db.Column(db.Date)
+    # D'autres champs peuvent être ajoutés en fonction des besoins
+
+class Prestation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(255))
+    montant_total = db.Column(db.Float)
+    date = db.Column(db.Date)

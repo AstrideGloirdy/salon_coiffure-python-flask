@@ -5,4 +5,12 @@ cassier = Blueprint('cassier', __name__)
 @cassier.route('/home')
 def home():
     return render_template('layouts/base.connexion.html')
-    #return "<h1>Test de l'application pour le cassier</h1>"
+
+@cassier.route('/facture')
+def Facture():
+    return render_template('cassier/ListFacture.html')
+
+@cassier.route('/facture')
+def AddFacture():
+    return render_template('cassier/facture/AddFacture.html')
+   

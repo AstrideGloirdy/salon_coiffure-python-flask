@@ -1,0 +1,73 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/carte.css') }}">
+<div id="card">
+    <div id="card-title">
+      <h1>AfroChic Coiffure</h1>
+    </div>
+    
+    <div id="card-information">
+      <div id="card-text">
+      <div id="card-name">
+        
+      <div id="card-detail">
+        <div class="card-box">
+          <p class="cardtitle">Nom :</p>
+          <p>{{abonnement.client.nom }}</p>
+        </div>
+        <div class="card-box ml-5 mr-1">
+          <p class="cardtitle ml-5">Prénom :</p>
+          <p>{{abonnement.client.prenom }}</p>
+        </div>
+      </div>
+      
+      <div id="card-detail">
+        <div class="card-box">
+          <p class="cardtitle">Télephone :</p>
+          <p>{{abonnement.client.telephone }}</p>
+        </div>
+        
+      </div>
+      <div class="card-box ">
+        <p class="cardtitle ">Adresse :</p>
+        <p>{{abonnement.client.adresse }}</p>
+      </div>
+      <div id="card-sign">
+        <p class="cardtitle">Abonnement :</p>
+        <p>{{ abonnement.type_abonnement.nomTypeAbonnement }}</p>
+      </div>
+      </div>
+      <div id="card-detail">
+        <div class="card-box ">
+          <p class="cardtitle">Réduction :</p>
+           <p>{{ abonnement.type_abonnement.taux_reduction }}%</p>
+        </div>
+        
+      </div>
+      <div class="card-box">
+        <p class="cardtitle ">Nombre de coiffures :</p>
+        <p>{{ abonnement.type_abonnement.nombre_coiffures_incluses }}</p>
+      </div>
+      <div class="card-box">
+        <p class="cardtitle">Montant :</p>
+        <p>{{ abonnement.montant }} FCFA</p>
+      </div>
+      <div id="card-sign">
+        
+      </div> 
+      </div>
+    </div>
+    <div id="card-code">
+      <div id="card-detail">
+        <div id="card-number ml-5 mr-3">
+          <p class="cardtitle ml-5 ">Date de Debut : </p>
+          <p >{{ abonnement.date_debut.strftime('%d.%m.%Y') }}</p>
+        </div>
+        <div id="card-number mr-2 ml-2 float-right ">
+          <p class="cardtitle mr-1 ml-2 ">Date de fin :</p>
+          <p>{{ abonnement.date_fin.strftime('%d.%m.%Y') }}</p>
+        </div>
+      </div>
+      <p>
+        <<<<<<<<<<<<<<<<<<<<<<<<<< ACC0000{{ abonnement.id }} <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+      </p>
+    </div>
+  </div>

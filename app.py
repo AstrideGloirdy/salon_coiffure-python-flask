@@ -1,4 +1,4 @@
-from src import create_app, generate_fake_data
+from src import create_app
 from src.models import db
 from flask_migrate import Migrate
 

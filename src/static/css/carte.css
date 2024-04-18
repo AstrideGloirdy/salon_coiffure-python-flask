@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Bitter|Arvo|ato&display=swap');
 
 body {
-  width: fit-content;
-  height: fit-content;
+  width: fit-content; /* Ajuste la largeur à celle du contenu */
+  height: fit-content; /* Ajuste la hauteur à celle du contenu */
+  margin: 0; /* Supprime les marges par défaut du corps */
+  display: flex; /* Utilise Flexbox pour le positionnement */
+  justify-content: center; /* Centre le contenu horizontalement */
+  align-items: center; /* Centre le contenu verticalement */
 }
 
 h1,h2,p{

@@ -7,6 +7,11 @@ from ..forms.TypeAbonnementForms import AddTypeAbonnementForm
 from ..forms.AbonnementForms import AddAbonnementForm
 from ..fileManager import save_uploaded_file
 
+from flask_weasyprint import HTML,CSS  
+from flask import send_file
+import os
+
+
 gestionnaire = Blueprint('gestionnaire', __name__)
 
 
@@ -160,6 +165,8 @@ def AddAbonnement():
         return redirect(url_for('gestionnaire.ListAbonnement'))
     return render_template('gestionnaire/AddAbonnement.html', form=form)
 
+# Details Abonnements 
+
 @gestionnaire.route('/Abonnement/details/<int:id>', methods=['GET'])
 def DetailAbonnement(id):
     abonnement = Abonnement.query.get_or_404(id)
@@ -167,9 +174,27 @@ def DetailAbonnement(id):
 
 
 
+#__________________________
 
 
 
+
+@gestionnaire.route('/Abonnement/details/<int:id>/print', methods=['GET'])
+def print_abonnement(id):
+    abonnement = Abonnement.query.get_or_404(id)
+    rendered_template = render_template('gestionnaire/carte.html', abonnement=abonnement)
+    # Générer le PDF à partir du modèle HTML en spécifiant la taille de la page A4 en paysage
+    pdf_bytes = HTML(string=rendered_template).write_pdf(
+        stylesheets=[CSS(string='@page { size: A3 ; }')]
+    )
+    # Chemin relatif pour enregistrer le PDF dans le répertoire de travail
+    pdf_path = os.path.join(os.getcwd(), "output.pdf")
+
+    # Enregistrer le PDF dans un fichier temporaire
+    with open(pdf_path, "wb") as f:
+        f.write(pdf_bytes)
+    # Envoyer le fichier PDF en réponse à la requête
+    return send_file(pdf_path, as_attachment=True)
 
 
 

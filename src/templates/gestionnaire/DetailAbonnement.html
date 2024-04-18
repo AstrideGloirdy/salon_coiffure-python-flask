@@ -2,111 +2,24 @@
 <!-- Lister clients  -->
 {% block content %}
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/carte.css') }}">
+  
   <div class="row">
     <div class="col-md-12">
         <div class="card">
+          <div class="col-md-12">
             <div class="card-body">
-              <div id="card">
-                <div id="card-title">
-                  <h1>AfroChic Coiffure</h1>
-                </div>
-                <div id="card-id">
-                  <div id="card-number">
-                    <p class="cardtitle">Carte :</p>
-                    <p> 00{{ abonnement.id }}</p>
-                  </div>
-                  <div id="card-number">
-                    <p class="cardtitle">Date de Debut : </p>
-                    <p>{{ abonnement.date_debut.strftime('%d.%m.%Y') }}</p>
-                  </div>
-                  <div id="card-number">
-                  <p class="cardtitle">Date de fin :</p>
-                  <p>{{ abonnement.date_fin.strftime('%d.%m.%Y') }}</p>
-                </div>
-                </div>
-                <div id="card-information">
-                  <div id="card-photo"></div>
-                  <div id="card-text">
-                  <div id="card-name">
-                    
-                  <div id="card-detail">
-                    <div class="card-box">
-                      <p class="cardtitle">Nom :</p>
-                      <p>{{abonnement.client.nom }}</p>
-                    </div>
-                    <div class="card-box ml-5">
-                      <p class="cardtitle">Prénom :</p>
-                      <p>{{abonnement.client.prenom }}</p>
-                    </div>
-                  </div>
-                  <div id="card-detail">
-                    <div class="card-box">
-                      <p class="cardtitle">Télephone :</p>
-                      <p>{{abonnement.client.telephone }}</p>
-                    </div>
-                    <div class="card-box">
-                      <p class="cardtitle">Adresse :</p>
-                      <p>{{abonnement.client.adresse }}</p>
-                    </div>
-                  </div>
-                  <div id="card-sign">
-                    <p class="cardtitle">Abonnement :</p>
-                    <p>{{ abonnement.type_abonnement.nomTypeAbonnement }}</p>
-                  </div>
-                  </div>
-                  <div id="card-detail">
-                    <div class="card-box">
-                      <p class="cardtitle">Taux de réduction :</p>
-                       <p>{{ abonnement.type_abonnement.taux_reduction }}%</p>
-                    </div>
-                    <div class="card-box">
-                      <p class="cardtitle">Nombre de coiffures :</p>
-                      <p>{{ abonnement.type_abonnement.nombre_coiffures_incluses }}</p>
-                    </div>
-                  </div>
-                  
-                  <div class="card-box">
-                    <p class="cardtitle">Montant :</p>
-                    <p>{{ abonnement.montant }} FCFA</p>
-                  </div>
-                  <div id="card-sign">
-                    
-                  </div> 
-                  </div>
-                </div>
-                <div id="card-code">
-                  <p>
-                    <<<<<<<<<<<<<<<<<<<<<<<<<< ACC0000{{ abonnement.id }} <<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                  </p>
-                </div>
-              </div> 
-            
-              <!-- <div class="Cart_card">
-                <figure class="Cart_card__figure">
-                  <img src="https://conta.nubank.com.br/images/nu-white.png" class="Cart_card__figure--logo"></img>
-                </figure>
-                <div class="Cart_card__reader">
-                  <div class="Cart_card__reader--risk card__reader--risk-one"></div>
-                  <div class="Cart_card__reader--risk card__reader--risk-two"></div>
-                  <div class="Cart_card__reader--risk card__reader--risk-three"></div>
-                  <div class="Cart_card__reader--risk card__reader--risk-four"></div>
-                </div>
-                <p class="Cart_card__number">5032 9334 3764 9846</p>
-                <div class="Cart_card__dates">
-                  <span class="Cart_card__dates--first">09/16</span>
-                  <span class="Cart_card__dates--second">09/19</span>
-                </div>
-                <p class="Cart_card__name">Astride
-                <p>
-                <div class="Cart_card__flag">
-                  <div class="Cart_card__flag--globe"></div>
-                  <div class="Cart_card__flag--red"></div>
-                  <div class="Cart_card__flag--yellow"></div>
-                </div>
-              </div> -->
+              {% include "gestionnaire/carte.html" %}
+              <div class="card-body d-flex align-items-center">
+                <a href="{{ url_for('gestionnaire.print_abonnement', id=abonnement.id) }}" class="btn btn-primary">Imprimer</a>
+                <a href="{{ url_for('gestionnaire.ListAbonnement') }}" class="btn btn-primary">Retour</a>
             </div>
+          </div>
+             
+
+            </div>
+            
         </div>
+        
     </div>  
   </div>
 

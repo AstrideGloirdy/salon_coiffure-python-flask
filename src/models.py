@@ -64,7 +64,6 @@ class Abonnement(db.Model):
     def __init__(self, client_id, type_abonnement_id):
         self.client_id = client_id
         self.type_abonnement_id = type_abonnement_id
-        # self.date_debut = datetime.now()
         self.date_debut = datetime.datetime.now()
         self.date_fin = self.calculer_date_fin()  
         self.montant = self.calculer_montant() 
@@ -82,7 +81,14 @@ class Abonnement(db.Model):
 
     def calculer_date_fin(self): # calculer la date de fin qui est dans 30 jours de la date de creation 
         return self.date_debut + timedelta(days=30)
-    
+
+# Pour le cassier 
+class Facture(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+    montant_total = db.Column(db.Float)
+    date = db.Column(db.Date)
+
 roles_users = db.Table('roles_users',
                        db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
                        db.Column('role_id', db.Integer, db.ForeignKey('role.id'), primary_key=True)
@@ -97,11 +103,13 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     login = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(50), nullable=False)
+    nom = db.Column(db.String(100), nullable=False)
+    prenom = db.Column(db.String(100), nullable=False)
+    telephone = db.Column(db.String(100), nullable=False)
+    adresse = db.Column(db.String(250), nullable=False)
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy=True))
 
-# def create_all():
-#     # Créer toutes les tables dans la base de données
-#     db.create_all()
+
 
 # ============= LES FONCTIONS POUR LA TABLE PRODUIT ============= 
 

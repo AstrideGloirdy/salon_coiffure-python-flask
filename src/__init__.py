@@ -19,8 +19,8 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-        # Générer des données fictives
-        generate_fake_data(app)
+        # # Générer des données fictives
+        # generate_fake_data(app)
 
     # Enregistrer les Blueprints
     app.register_blueprint(gestionnaire, url_prefix='/gestionnaire')
@@ -31,10 +31,10 @@ def create_app():
 
 
 
-def generate_fake_data(app):
-    with app.app_context():
-        categories = generate_fake_categories()
-        db.session.add_all(categories)
-        produits = generate_fake_produits()
-        db.session.add_all(produits)
-        db.session.commit()
+# def generate_fake_data(app):
+#     with app.app_context():
+#         categories = generate_fake_categories()
+#         db.session.add_all(categories)
+#         produits = generate_fake_produits()
+#         db.session.add_all(produits)
+#         db.session.commit()
