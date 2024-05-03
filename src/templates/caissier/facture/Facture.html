@@ -1,73 +1,171 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='css/carte.css') }}">
-<div id="card">
-    <div id="card-title">
-      <h1>AfroChic Coiffure</h1>
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <title>Facture</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+
+    <!-- External CSS libraries -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='template/vendors/css/vendor.bundle.base.css') }}">
+    <link type="text/css" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/font-awesome/css/font-awesome.min.css') }}"> 
+
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/img/favicon.ico') }}" type="image/x-icon" >
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900">
+
+    <!-- Custom Stylesheet -->
+    <link type="text/css" rel="stylesheet"  href="{{ url_for('static', filename='assets/css/style.css') }}" href="">
+</head>
+<body>
+
+<!-- Invoice 2 start -->
+<div class="invoice-2 invoice-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="invoice-inner clearfix">
+                    <div class="invoice-info clearfix" id="invoice_wrapper">
+                        <div class="invoice-headar">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="invoice-logo">
+                                        <!-- logo started -->
+                                        <div class="logo">
+                                            <img src="assets/img/logos/logo.png" alt="logo">
+                                        </div>
+                                        <!-- logo ended -->
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="invoice-id">
+                                        <div class="info">
+                                            <h1 class="inv-header-1">Facture</h1>
+                                            <p class="mb-1">Numero de la facture : <span>#000{{ facture.id }}</span></p>
+                                            <p class="mb-0">Date et heure : <span>{{ facture.date.strftime("%d %b %Y %H:%M") }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invoice-top">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="invoice-number mb-30">
+                                        <h4 class="inv-title-1">Facture A </h4>
+                                        <h2 class="name">Jhon Smith</h2>
+                                        <p class="invo-addr-1">
+                                            Theme Vessel <br/>
+                                            info@themevessel.com <br/>
+                                            21-12 Green Street, Meherpur, Bangladesh <br/>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="invoice-number mb-30">
+                                        <div class="invoice-number-inner">
+                                            <h4 class="inv-title-1">Facture fait par</h4>
+                                            <h2 class="name">{{ facture.user.nom }} {{ facture.user.prenom }}</h2>
+                                            <p class="invo-addr-1">
+                                                {{facture.user.telephone}} <br/>
+                                                {{facture.user.login}}<br/>
+                                                {{facture.user.adresse}} <br/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invoice-center">
+                            <div class="table-responsive">
+                              <table class="table mb-0 table-striped invoice-table">
+                                <thead class="bg-active">
+                                <tr class="tr">
+                                    <th>No.</th>
+                                    <th class="pl0 text-start">Description</th>
+                                    <th class="text-center">Prix</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="tr">
+                                    <td>
+                                        <div class="item-desc-1">
+                                            <span>01</span>
+                                        </div>
+                                    </td>
+                                    <td class="pl0">{{ facture.produit.nom }}</td>
+                                    <td class="text-center">{{ facture.produit.prix }}</td>
+                                    <td class="text-center">{{ facture.quantite }}</td>
+                                    <td class="text-end">{{ facture.montant_total }}</td>
+                                </tr>
+                                <tr class="tr2">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-center">SubTotal</td>
+                                    <td class="text-end">{{ facture.montant_total }}</td>
+                                </tr>
+                                <tr class="tr2">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-center f-w-600 active-color">Grand Total</td>
+                                    <td class="f-w-600 text-end active-color">{{ facture.montant_total }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                        <div class="invoice-bottom">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-5 col-sm-5">
+                                    <div class="payment-method mb-30">
+                                        <h3 class="inv-title-1">Payment Method</h3>
+                                        <ul class="payment-method-list-1 text-14">
+                                            <li><strong>Account No:</strong> 00 123 647 840</li>
+                                            <li><strong>Account Name:</strong> Jhon Doe</li>
+                                            <li><strong>Branch Name:</strong> xyz</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="invoice-contact clearfix">
+                            <div class="row g-0">
+                                <div class="col-sm-12">
+                                    <div class="contact-info clearfix">
+                                        <a href="tel:+55-4XX-634-7071" class="d-flex"><i class="fa fa-phone"></i> +00 123 647 840</a>
+                                        <a href="tel:info@themevessel.com" class="d-flex"><i class="fa fa-envelope"></i> info@themevessel.com</a>
+                                        <a href="tel:info@themevessel.com" class="mr-0 d-flex d-none-580"><i class="fa fa-map-marker"></i> 169 Teroghoria, Bangladesh</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="invoice-btn-section clearfix d-print-none">
+                        <a href="javascript:window.print()" class="btn btn-lg btn-print">
+                            <i class="fa fa-print"></i> Imprimer la facture 
+                        </a>
+                        <a id="invoice_download_btn" class="btn btn-lg btn-download btn-theme">
+                            <i class="fa fa-download"></i> Telecharger la facture
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <div id="card-information">
-      <div id="card-text">
-      <div id="card-name">
-        
-      <div id="card-detail">
-        <div class="card-box">
-          <p class="cardtitle">Nom :</p>
-          <p>{{abonnement.client.nom }}</p>
-        </div>
-        <div class="card-box ml-5 mr-1">
-          <p class="cardtitle ml-5">Prénom :</p>
-          <p>{{abonnement.client.prenom }}</p>
-        </div>
-      </div>
-      
-      <div id="card-detail">
-        <div class="card-box">
-          <p class="cardtitle">Télephone :</p>
-          <p>{{abonnement.client.telephone }}</p>
-        </div>
-        
-      </div>
-      <div class="card-box ">
-        <p class="cardtitle ">Adresse :</p>
-        <p>{{abonnement.client.adresse }}</p>
-      </div>
-      <div id="card-sign">
-        <p class="cardtitle">Abonnement :</p>
-        <p>{{ abonnement.type_abonnement.nomTypeAbonnement }}</p>
-      </div>
-      </div>
-      <div id="card-detail">
-        <div class="card-box ">
-          <p class="cardtitle">Réduction :</p>
-           <p>{{ abonnement.type_abonnement.taux_reduction }}%</p>
-        </div>
-        
-      </div>
-      <div class="card-box">
-        <p class="cardtitle ">Nombre de coiffures :</p>
-        <p>{{ abonnement.type_abonnement.nombre_coiffures_incluses }}</p>
-      </div>
-      <div class="card-box">
-        <p class="cardtitle">Montant :</p>
-        <p>{{ abonnement.montant }} FCFA</p>
-      </div>
-      <div id="card-sign">
-        
-      </div> 
-      </div>
-    </div>
-    <div id="card-code">
-      <div id="card-detail">
-        <div id="card-number ml-5 mr-3">
-          <p class="cardtitle ml-5 ">Date de Debut : </p>
-          <p >{{ abonnement.date_debut.strftime('%d.%m.%Y') }}</p>
-        </div>
-        <div id="card-number mr-2 ml-2 float-right ">
-          <p class="cardtitle mr-1 ml-2 ">Date de fin :</p>
-          <p>{{ abonnement.date_fin.strftime('%d.%m.%Y') }}</p>
-        </div>
-      </div>
-      <p>
-        <<<<<<<<<<<<<<<<<<<<<<<<<< ACC0000{{ abonnement.id }} <<<<<<<<<<<<<<<<<<<<<<<<<<<<
-      </p>
-    </div>
-  </div>
+</div>
+<!-- Invoice 2 end -->
+
+
+<script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/jspdf.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/html2canvas.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/app.js') }}"></script>
+</body>
+</html>

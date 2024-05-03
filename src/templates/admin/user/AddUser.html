@@ -1,0 +1,66 @@
+{% extends "layouts/base.html" %}
+<!-- Lister Produits  -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+      <div class="card">
+            <div class="card-body">
+              <h4 class="card-title ">Ajouter un User</h4>
+
+            <form method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.login.label }} {{ form.login(class="form-control") }}
+                    {% for error in form.login.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label }} {{ form.password(class="form-control") }}
+                    {% for error in form.password.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.nom.label }} {{ form.nom(class="form-control") }}
+                    {% for error in form.nom.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.prenom.label }} {{ form.prenom(class="form-control") }}
+                    {% for error in form.prenom.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.telephone.label }} {{ form.telephone(class="form-control") }}
+                    {% for error in form.telephone.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.adresse.label }} {{ form.adresse(class="form-control") }}
+                    {% for error in form.adresse.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                  {{ form.role.label(class="form-control-label") }}
+                  {{ form.role(class="form-control") }}
+                  {% for error in form.role.errors %}
+                  <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
+              </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>   
+</div>
+
+
+
+{% endblock %}

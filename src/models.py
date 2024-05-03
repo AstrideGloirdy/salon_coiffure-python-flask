@@ -1,9 +1,20 @@
+from flask import Flask
+
 from datetime import timedelta
 import datetime
-import os
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from config import UPLOAD_FOLDER
-db = SQLAlchemy()
+
+
+
+app = Flask(__name__,template_folder="./templates",static_folder='./static')
+app.config.from_object('config')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+db = SQLAlchemy(app)
+# Initialiser la base de données SQLAlchemy
+migrate = Migrate(app, db)
 
 # Créer une instance de SQLAlchemy
 # db = SQLAlchemy()
@@ -25,6 +36,7 @@ class Produit(db.Model):
     qteStock = db.Column(db.Integer, nullable=False)
     categorie_id = db.Column(db.Integer, db.ForeignKey('categorie.id'), nullable=False)
     categorie = db.relationship('Categorie', backref=db.backref('produits', lazy=True))
+    produit = db.relationship("Facture", backref="produit")
 
 
 class Client(db.Model):
@@ -50,6 +62,8 @@ class Coiffure(db.Model):
     nom = db.Column(db.String(100), nullable=False)
     prix = db.Column(db.Float, nullable=False)
     abonnements = db.relationship('TypeAbonnement', back_populates='coiffure')
+    coiffure = db.relationship("Facture", backref="coifure")
+
 
 class Abonnement(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -82,35 +96,73 @@ class Abonnement(db.Model):
     def calculer_date_fin(self): # calculer la date de fin qui est dans 30 jours de la date de creation 
         return self.date_debut + timedelta(days=30)
 
-# Pour le cassier 
+    
+# # Pour le cassier 
+
+# Modèle pour les factures
 class Facture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
-    montant_total = db.Column(db.Float)
-    date = db.Column(db.Date)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    produit_id = db.Column(db.Integer, db.ForeignKey('produit.id'), nullable=True)
+    coiffure_id = db.Column(db.Integer, db.ForeignKey('coiffure.id'), nullable=True)
+    quantite_coiffure = db.Column(db.Integer, nullable=True)
+    quantite_produit = db.Column(db.Integer, nullable=True)
+    montant_total = db.Column(db.Float, nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
+    user = db.relationship("User", backref="factures")
 
-roles_users = db.Table('roles_users',
-                       db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-                       db.Column('role_id', db.Integer, db.ForeignKey('role.id'), primary_key=True)
-                       )
+    # def __init__(self, user_id, produit_id,coiffure_id,quantite_coiffure,quantite_produit,montant_total,date):
+    #     self.user_id = user_id
+    #     self.produit_id = produit_id
+    #     self.coiffure_id = coiffure_id
+    #     self.quantite_coiffure = quantite_coiffure 
+    #     self.quantite_produit = quantite_produit
+    #     self.montant_total = montant_total
+    #     self.date = date
+
+    
+   
+    
+
+# facture_produits = db.Table(
+#     'facture_produits',  # Utilisez le même nom ici
+#     db.Column('facture_id', db.Integer, db.ForeignKey('facture.id'), primary_key=True),
+#     db.Column('produit_id', db.Integer, db.ForeignKey('produit.id'), primary_key=True),
+#     db.Column('quantite', db.Integer, nullable=False),
+# )
+
+
+# class Facture(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     date = db.Column(db.DateTime, nullable=False)
+#     montant_total = db.Column(db.Float, nullable=False)
+#     montant_paye = db.Column(db.Float, nullable=False)
+#     montant_restant = db.Column(db.Float, nullable=False)
+#     produits = db.relationship("Produit", secondary=facture_produits, backref="factures")
+
+
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
 
-class User(db.Model):
+    
+
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    login = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    login = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
     nom = db.Column(db.String(100), nullable=False)
     prenom = db.Column(db.String(100), nullable=False)
     telephone = db.Column(db.String(100), nullable=False)
     adresse = db.Column(db.String(250), nullable=False)
-    roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy=True))
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
+    role = db.relationship('Role', backref=db.backref('users', lazy=True))
 
-
-
+    
+    
 # ============= LES FONCTIONS POUR LA TABLE PRODUIT ============= 
 
     def getAll():
@@ -227,3 +279,44 @@ class User(db.Model):
  
     def findById(id):
         return Coiffure.query.get(id)
+
+# ============= LES FONCTIONS POUR LA TABLE FACTURE  ============= 
+    def getAll():
+        return Facture.query.order_by(Facture.date).all()
+
+    
+    def save(facture):
+        db.session.add(facture)
+        db.session.commit()
+
+    def update(facture):
+        db.session.commit()
+
+    
+    def delete(facture):
+        db.session.delete(facture)
+        db.session.commit()
+
+ 
+    def findById(id):
+        return Facture.query.get(id)
+    
+# ============= LES FONCTIONS POUR LA TABLE USER  ============= 
+    def getAll():
+        return User.query.order_by(User.nom).all()
+    
+    def save(user):
+        db.session.add(user)
+        db.session.commit()
+
+    def update(user):
+        db.session.commit()
+
+    
+    def delete(user):
+        db.session.delete(user)
+        db.session.commit()
+
+ 
+    def findById(id):
+        return User.query.get(id)

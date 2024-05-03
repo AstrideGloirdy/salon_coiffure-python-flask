@@ -9,8 +9,8 @@ SECRET_KEY="MaCleSecrete"
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 basedir = os.path.abspath(os.path.dirname(__file__))
-SQLALCHEMY_DATABASE_URI = "sqlite:///C:/Users/gastr/Desktop/projet python/GestionSalon/gestion.sqlite"
+SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "gestion.sqlite")
 
 #----- Fichier de telecharement des photos 
 
-UPLOAD_FOLDER = 'C:/Users/gastr/Desktop/projet python/GestionSalon/src/Upload'
+UPLOAD_FOLDER = './src/Upload'

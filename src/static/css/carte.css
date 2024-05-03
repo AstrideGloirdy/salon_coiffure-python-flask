@@ -1,13 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Bitter|Arvo|ato&display=swap');
 
-body {
-  width: fit-content; /* Ajuste la largeur à celle du contenu */
-  height: fit-content; /* Ajuste la hauteur à celle du contenu */
-  margin: 0; /* Supprime les marges par défaut du corps */
-  display: flex; /* Utilise Flexbox pour le positionnement */
-  justify-content: center; /* Centre le contenu horizontalement */
-  align-items: center; /* Centre le contenu verticalement */
-}
+
 
 h1,h2,p{
   margin: 0;
@@ -19,7 +12,7 @@ h1{
   font-size: 25px;
 }
 
-.cardtitle {
+.carte_cardtitle {
   font-family: 'Bitter', serif;
   font-weight: bold;
 }
@@ -31,12 +24,15 @@ p {
   font-size: 15px;
 }
 
-#card {
+#carte_card {
   border: solid 2px #000;
   border-radius: 10px;
   box-shadow: 1px 2px 10px #000;
   background-color: #E9EEF2;
-  margin: auto;
+  margin-left: 240px;
+  margin-top: 25px;
+  width: 550px;
+  height: 350px;
 }
 
 #card-title {
@@ -49,7 +45,10 @@ p {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
-
+@page {
+  size: a4 portrait;
+  margin: 0mm 0mm 0mm 0mm;
+}
 #card-id {
   padding: 5px;
   display: flex;
@@ -65,13 +64,6 @@ p {
   padding: 5px;
 }
 
-#card-photo {
-  background: url("{{ url_for('static', filename='img/photo.jpg') }}") no-repeat, #BFAE99;
-  border: none ;
-  height: 150px;
-  width: 100px;
-  margin-right: 10px;
-}
 
 #card-detail {
   display: flex;
@@ -90,7 +82,8 @@ p {
 }
 
 #card-code {
-  padding: 5px;
+  padding-top: 12px;
+  padding-bottom: 13px;
   background-color: #fff;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;

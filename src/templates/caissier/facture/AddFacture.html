@@ -1,45 +1,85 @@
 {% extends "layouts/base.html" %}
-<!-- Lister Produits  -->
+
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-      <div class="card">
+        <div class="card">
             <div class="card-body">
-              <h4 class="card-title ">Ajouter un type de coiffure</h4>
-
-              <form method="POST" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
-
-                <div class="form-group">
-                    {{ form.nom.label(class="form-control-label") }}
-                    {{ form.nom(class="form-control") }}
-                    {% for error in form.nom.errors %}
-                    <span class="text-danger">{{ error }}</span>
-                    {% endfor %}
-                </div>
-                <div class="form-group">
-                  {{ form.prix.label(class="form-control-label") }}
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">XOF</span>
+                <h4 class="card-title">Ajouter une Facture</h4>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.produit.label(class="form-control-label") }}
+                        {% if form.produit.errors %}
+                            <ul class="errors">
+                                {% for error in form.produit.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {{ form.produit(class="form-control") }}
                     </div>
-                    {{ form.prix(class="form-control") }}
-                  </div>
-                  {% for error in form.prix.errors %}
-                  <span class="text-danger">{{ error }}</span>
-                  {% endfor %}
-              </div>
+                    <div class="form-group">
+                        {{ form.quantiteProd.label(class="form-control-label") }}
+                        {% if form.quantiteProd.errors %}
+                            <ul class="errors">
+                                {% for error in form.quantiteProd.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {{ form.quantiteProd(class="form-control") }}
+                    </div>
                 
-                <button type="submit" class="btn btn-primary mr-2">Enregistrer</button>
-                <button href="{{ url_for('gestionnaire.ListCoiffure') }}"  class="btn btn-light">Annuler</button>
-            </form>
+                    <div class="form-group">
+                        {{ form.coiffure.label(class="form-control-label") }}
+                        {% if form.coiffure.errors %}
+                            <ul class="errors">
+                                {% for error in form.coiffure.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {{ form.coiffure(class="form-control") }}
+                    </div>
+                    
+                    <div class="form-group">
+                        {{ form.quantiteCoif.label(class="form-control-label") }}
+                        {% if form.quantiteCoif.errors %}
+                            <ul class="errors">
+                                {% for error in form.quantiteCoif.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {{ form.quantiteCoif(class="form-control") }}
+                    </div>
+                    
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+                
             </div>
-          </div>
         </div>
-      </div>
-    </div>   
+    </div>
 </div>
 
 
 
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+   
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+          width: 'resolve'
+        });
+      });
+    </script>
+  
 {% endblock %}
