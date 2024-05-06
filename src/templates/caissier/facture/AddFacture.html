@@ -5,65 +5,123 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Ajouter une Facture</h4>
+                <h4 class="card-title">Ajouter une facture</h4>
                 <form method="POST">
                     {{ form.hidden_tag() }}
-                    <div class="form-group">
-                        {{ form.produit.label(class="form-control-label") }}
-                        {% if form.produit.errors %}
-                            <ul class="errors">
-                                {% for error in form.produit.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        {{ form.produit(class="form-control") }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.quantiteProd.label(class="form-control-label") }}
-                        {% if form.quantiteProd.errors %}
-                            <ul class="errors">
-                                {% for error in form.quantiteProd.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        {{ form.quantiteProd(class="form-control") }}
-                    </div>
-                
-                    <div class="form-group">
-                        {{ form.coiffure.label(class="form-control-label") }}
-                        {% if form.coiffure.errors %}
-                            <ul class="errors">
-                                {% for error in form.coiffure.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        {{ form.coiffure(class="form-control") }}
-                    </div>
+                    <div class="form-inline mt-2 mb-2">
+                        <div class="form-group">
+                            {{ form.produit.label(class="form-control-label mb-2 mr-sm-2") }}
+                            {% if form.produit.errors %}
+                                <ul class="errors">
+                                    {% for error in form.produit.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {{ form.produit(class="form-control mb-2 mr-sm-2") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.quantiteProd.label(class="form-control-label mb-2 mr-sm-2 ") }}
+                            {% if form.quantiteProd.errors %}
+                                <ul class="errors">
+                                    {% for error in form.quantiteProd.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {{ form.quantiteProd(class="form-control mb-2 mr-sm-2") }}
+                        </div>
                     
-                    <div class="form-group">
-                        {{ form.quantiteCoif.label(class="form-control-label") }}
-                        {% if form.quantiteCoif.errors %}
-                            <ul class="errors">
-                                {% for error in form.quantiteCoif.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        {{ form.quantiteCoif(class="form-control") }}
                     </div>
-                    
-                    <div class="form-group">
-                        {{ form.submit(class="btn btn-primary") }}
-                    </div>
+                   
+                   <div class="form-inline mt-3 mb-5">
+                        <div class="form-group">
+                            {{ form.coiffure.label(class="form-control-label mb-2 mr-sm-2") }}
+                            {% if form.coiffure.errors %}
+                                <ul class="errors">
+                                    {% for error in form.coiffure.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {{ form.coiffure(class="form-control mb-2 mr-sm-2") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.quantiteCoif.label(class="form-control-label") }}
+                            {% if form.quantiteCoif.errors %}
+                                <ul class="errors">
+                                    {% for error in form.quantiteCoif.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {{ form.quantiteCoif(class="form-control") }}
+                        </div>
+                        <div class="form-group ml-4 ">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                   </div>
                 </form>
-                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Détails de la Facture</h4>
+                                <table class="table  table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Produit/Coiffure</th>
+                                            <th>Prix unitaire</th>
+                                            <th>Quantité</th>
+                                            <th>Montant</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for produit in produits %}
+                                        <tr>
+                                            <td>{{ produit.nom }}</td>
+                                            <td>{{ produit.prix }} FCFA</td>
+                                            <td>{{ produit.quantite }}</td>
+                                            <td>{{ produit.montant }} FCFA</td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% for coiffure in coiffures %}
+                                        <tr>
+                                            <td>{{ coiffure.nom }}</td>
+                                            <td>{{ coiffure.prix }} FCFA</td>
+                                            <td>{{ coiffure.quantite }}</td>
+                                            <td>{{ coiffure.montant }} FCFA</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    
+                                </table>
+                                
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <!-- Montant total de la facture -->
+                    
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title ">Montant Total</h4>
+                        <p class="text-success font-weight-bold ">{{ montant_total }} FCFA</p>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="form-group ml-4">
+                <form method="POST" action="{{ url_for('AddFacture') }}">
+                    <button type="submit" name="Enregistrer" class="btn btn-success">Enregistrer</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+
 
 
 

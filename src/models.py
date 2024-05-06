@@ -36,8 +36,8 @@ class Produit(db.Model):
     qteStock = db.Column(db.Integer, nullable=False)
     categorie_id = db.Column(db.Integer, db.ForeignKey('categorie.id'), nullable=False)
     categorie = db.relationship('Categorie', backref=db.backref('produits', lazy=True))
-    produit = db.relationship("Facture", backref="produit")
-
+    # produit = db.relationship("Facture", backref="produit")
+    factures = db.relationship("DetailsFacture", backref="produit")
 
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -62,7 +62,7 @@ class Coiffure(db.Model):
     nom = db.Column(db.String(100), nullable=False)
     prix = db.Column(db.Float, nullable=False)
     abonnements = db.relationship('TypeAbonnement', back_populates='coiffure')
-    coiffure = db.relationship("Facture", backref="coifure")
+    factures = db.relationship("DetailsFacture", backref="coiffure")
 
 
 class Abonnement(db.Model):
@@ -99,47 +99,31 @@ class Abonnement(db.Model):
     
 # # Pour le cassier 
 
-# Modèle pour les factures
+# Model détails de facture
+class DetailsFacture(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    facture_id = db.Column(db.Integer, db.ForeignKey('facture.id'), nullable=False)
+    produit_id = db.Column(db.Integer, db.ForeignKey('produit.id'), nullable=True)
+    coiffure_id = db.Column(db.Integer, db.ForeignKey('coiffure.id'), nullable=True)
+    quantite_produit = db.Column(db.Integer, nullable=True)
+    quantite_coiffure = db.Column(db.Integer, nullable=True)
+
+# Model facture
 class Facture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    produit_id = db.Column(db.Integer, db.ForeignKey('produit.id'), nullable=True)
-    coiffure_id = db.Column(db.Integer, db.ForeignKey('coiffure.id'), nullable=True)
-    quantite_coiffure = db.Column(db.Integer, nullable=True)
-    quantite_produit = db.Column(db.Integer, nullable=True)
     montant_total = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     user = db.relationship("User", backref="factures")
-
-    # def __init__(self, user_id, produit_id,coiffure_id,quantite_coiffure,quantite_produit,montant_total,date):
-    #     self.user_id = user_id
-    #     self.produit_id = produit_id
-    #     self.coiffure_id = coiffure_id
-    #     self.quantite_coiffure = quantite_coiffure 
-    #     self.quantite_produit = quantite_produit
-    #     self.montant_total = montant_total
-    #     self.date = date
-
-    
-   
-    
-
-# facture_produits = db.Table(
-#     'facture_produits',  # Utilisez le même nom ici
-#     db.Column('facture_id', db.Integer, db.ForeignKey('facture.id'), primary_key=True),
-#     db.Column('produit_id', db.Integer, db.ForeignKey('produit.id'), primary_key=True),
-#     db.Column('quantite', db.Integer, nullable=False),
-# )
+    details = db.relationship("DetailsFacture", backref="facture")
 
 
-# class Facture(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-#     date = db.Column(db.DateTime, nullable=False)
-#     montant_total = db.Column(db.Float, nullable=False)
-#     montant_paye = db.Column(db.Float, nullable=False)
-#     montant_restant = db.Column(db.Float, nullable=False)
-#     produits = db.relationship("Produit", secondary=facture_produits, backref="factures")
+
+class Caisse(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    montant_total = db.Column(db.Float, nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+
 
 
 

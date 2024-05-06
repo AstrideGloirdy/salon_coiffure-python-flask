@@ -1,0 +1,99 @@
+{% extends "layouts/base.html" %}
+<!-- Lister caisses  -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+               
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body ">
+                    <div class="d-flex align-items-center justify-content-between justify-content-md-center justify-content-xl-between flex-wrap mb-4">
+                      <div>
+                        <p class="mb-2 text-md-center text-lg-left">Solde de la caisse</p>
+                        <h1 class="mb-0 text-primary">{{total_caisse}} FCFA </h1>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <div class="card">
+                    <div class="table-responsive pt-3">
+                      <table class="table table-striped project-orders-table">
+                        <thead>
+                          <tr>
+                            <th class="ml-5">ID</th>
+                            <th>Montant</th>
+                            <th>Date et heure </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for caisse in caisses %}
+                          <tr>
+                            <td>{{caisse.id}}</td>
+                            <td>{{caisse.montant_total}} FCFA</td>
+                            <td>{{caisse.date.strftime('%d-%m-%Y %H:%M:%S')}}</td>
+                            
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                
+                
+                 <nav aria-label="Page navigation example mt-4">
+                    <ul class="pagination">
+                      {% if caisses.has_prev %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('VoirCaisse', page=caisses.prev_num) }}">Previous</a></li>
+                      {% else %}
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                      {% endif %}
+                  
+                      {% for page_num in caisses.iter_pages() %}
+                        {% if page_num %}
+                          {% if caisses.page == page_num %}
+                            <li class="page-item active" aria-current="page"><span class="page-link">{{ page_num }}</span></li>
+                          {% else %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('VoirCaisse', page=page_num) }}">{{ page_num }}</a></li>
+                          {% endif %}
+                        {% else %}
+                          <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                      {% endfor %}
+                  
+                      {% if caisses.has_next %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('VoirCaisse', page=caisses.next_num) }}">Next</a></li>
+                      {% else %}
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                      {% endif %}
+                    </ul>
+                </nav> 
+                
+                
+            </div>
+            
+        
+        </div>
+    
+    </div>
+    
+      
+</div>
+
+    {% block javascript %}
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        
+    {% endblock %}
+
+
+{% endblock %}
+
+    
+    

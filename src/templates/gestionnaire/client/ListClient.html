@@ -21,6 +21,7 @@
                                 <th>Prenom</th>
                                 <th>Telephone</th>
                                 <th>Adresse</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,6 +32,19 @@
                                 <td>{{ client.prenom }}</td>
                                 <td>{{ client.telephone }}</td>
                                 <td>{{ client.adresse }}</td>
+                                <td>
+                                  <div class="d-flex align-items-center">
+                                    <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3">
+                                      Edit
+                                      <i class="typcn typcn-edit btn-icon-append"></i>                          
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm btn-icon-text">
+                                      Delete
+                                      <i class="typcn typcn-delete-outline btn-icon-append"></i>                          
+                                    </button>
+                                  </div>
+                                </td>
+
                             </tr>
                             {% endfor %}
                         </tbody>

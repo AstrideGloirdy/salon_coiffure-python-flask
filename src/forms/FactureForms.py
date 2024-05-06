@@ -12,7 +12,8 @@ class AddFactureForm(FlaskForm):
     submit = SubmitField('Ajouter')
 
 
-
+class AddPaiementForm(FlaskForm):
+    submit = SubmitField('Enregistrer')
 
 
 

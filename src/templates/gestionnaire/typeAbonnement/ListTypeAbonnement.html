@@ -60,27 +60,7 @@
                 </div>
                 {% endfor %}
               </div>
-                <!-- <div class="row">
-                  {% for abonnement in abonnements %}
-                  <div class="col-lg-4 col-md-4 d-flex mb-4">
-                      <div class="card" style="border-width: 5px; border-style: solid;
-                       border-radius: 10px; border-color: rgb(112, 12, 142);">
-                          <div class="card-header text-white small" style="background-color: antiquewhite; font-size: x-small; border-bottom: 20px;">
-                              <h5 class="card-title " style="font-size: small; ">{{ abonnement.nomTypeAbonnement }}</h5>
-                          </div>
-                          <div class="card-body">
-                              <h6 class="card-subtitle mb-2">Abonnement Mensuel</h6>
-                              <ul class="list-group list-group-flush small">
-                                  <li class="list-group-item rounded">Taux de réduction : {{ abonnement.taux_reduction }}%</li>
-                                  <li class="list-group-item rounded">Nombre de coiffures incluses : {{ abonnement.nombre_coiffures_incluses }}</li>
-                                  <li class="list-group-item rounded">Nombre de coiffures restantes : {{ abonnement.nombre_coiffures_restantes }}</li>
-                              </ul>
-                          </div>
-                      </div>
-                  </div>
-                  {% endfor %}
-                </div> -->
-                
+                 
                 <nav aria-label="Page navigation example mt-4">
                   <ul class="pagination">
                     {% if abonnements.has_prev %}

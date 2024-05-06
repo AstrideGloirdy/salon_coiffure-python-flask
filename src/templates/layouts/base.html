@@ -34,42 +34,6 @@
     </div>
   </div>
   <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
-    <!-- <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div class="navbar-brand-wrapper d-flex justify-content-center">
-        <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
-          <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo-mini.svg" alt="logo"/></a>
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-            <span class="typcn typcn-th-menu"></span>
-          </button>
-        </div>
-      </div>
-      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-        <ul class="navbar-nav navbar-nav-right">
-            <ul class="navbar-nav mr-lg-2">
-                <li class="nav-item nav-profile dropdown">
-                  <a class="nav-link" href="#" data-toggle="dropdown" id="profileDropdown">
-                    <span class="nav-profile-name">{{ current_user.nom}} / {{current_user.role.name}}</span>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item">
-                      <i class="typcn typcn-cog-outline text-primary"></i>
-                      Settings
-                    </a>
-                    <a class="dropdown-item" href="{{ url_for('logout')}}">
-                      <i class="typcn typcn-eject text-primary"></i>
-                      Logout
-                    </a>
-                  </div>
-                </li>
-              </ul>
-        </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-          <span class="typcn typcn-th-menu"></span>
-        </button>
-      </div>
-    </nav> -->
-    <!-- sans modification-->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="navbar-brand-wrapper d-flex justify-content-center">
         <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
@@ -164,6 +128,7 @@
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
+          {% if current_user.is_authenticated and current_user.role.name == 'gestionnaire' %}
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('ListerArticle') }}">
               <i class="typcn typcn-device-desktop menu-icon"></i>
@@ -171,7 +136,6 @@
               <div class="badge badge-danger">Home</div>
             </a>
           </li>
-          {% if current_user.is_authenticated and current_user.role.name == 'gestionnaire' %}
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#article" aria-expanded="false" aria-controls="ui-basic">
               <i class="typcn typcn-document-text menu-icon"></i>
@@ -257,25 +221,25 @@
           {% endif %}
           {% if current_user.is_authenticated and current_user.role.name == 'caissier' %}
           <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#caissier" aria-expanded="false" aria-controls="error">
-              <i class="typcn typcn-globe-outline menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
+            <a class="nav-link" href="{{ url_for('ListFacture') }}">
+              <i class="typcn typcn-mortar-board menu-icon"></i>
+              <span class="menu-arrow">Liste Facture</span>
             </a>
-            <div class="collapse" id="caissier">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{ url_for('ListFacture') }}">Liste Facture  </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('AddFacture') }}">
+              <i class="typcn typcn-mortar-board menu-icon"></i>
+              <span class="menu-arrow">Faire une facture </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('VoirCaisse') }}">
+              <i class="typcn typcn-mortar-board menu-icon"></i>
+              <span class="menu-title">Voir la caisse</span>
+            </a>
           </li>
           {% endif %}
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="typcn typcn-mortar-board menu-icon"></i>
-              <span class="menu-title">Det</span>
-            </a>
-          </li>
+          
         </ul>
       </nav>
       <!-- partial -->

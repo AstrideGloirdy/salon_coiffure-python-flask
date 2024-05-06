@@ -11,31 +11,8 @@
                     <h4 class="card-title flex-grow-1">Liste des produits</h4>
                     <a href="{{ url_for('AddArticle') }}" class="btn btn-info ml-auto">Nouveau</a>
                 </div>
-                <!-- Button trigger modal -->
-    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-    </button> -->
-  
-  <!-- Modal -->
-  <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div> -->
+                
+
                 <div class="table-responsive mb-5">
                     <table class="table table-hover table-striped">
                         <thead>
@@ -68,7 +45,7 @@
                                 <td>
                                     <!-- Icône de modification -->
                                     <a href="#"><i class="typcn typcn-edit" style="font-size: 24px; color: blue;"></i></a>
-
+                                    
                                     <!-- Icône de suppression -->
                                     <a href="#" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')"><i class="typcn typcn-trash" style="font-size: 24px; color: red;"></i></a>
                                 </td>
