@@ -45,7 +45,7 @@
                 </div>
                 <div class="form-group">
                     {{ form.photo.label(class="form-control-label") }}
-                    {{ form.photo(class="form-control-file") }}
+                    {{ form.photo(class="form-control") }}
                     {% for error in form.photo.errors %}
                     <small class="text-danger">{{ error }}</small>
                     {% endfor %}
@@ -58,7 +58,7 @@
                     {% endfor %}
                 </div>
                 <button type="submit" class="btn btn-primary mr-2">Enregistrer</button>
-                <button href="{{ url_for('ListerArticle') }}"  class="btn btn-light">Annuler</button>
+                <button href="{{ url_for('ListerArticle') }}"  class="btn btn-danger">Annuler</button>
             </form>
             </div>
           </div>

@@ -1,91 +1,122 @@
-@import url('https://fonts.googleapis.com/css?family=Bitter|Arvo|ato&display=swap');
+/*===== GOOGLE FONTS =====*/
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
+/*===== VARIABLES CSS =====*/
+:root {
+  --dark-color-lighten: #f2f5ff;
+  --red-card: #9c3786;
+  --blue-card: #4bb7e6;
+  --btn: #141414;
+  --btn-hover: #3a3a3a;
+  --text: #fbf7f7;
+}
 
-
-h1,h2,p{
+/*===== RESET =====*/
+*,
+::before,
+::after {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-h1{
-  font-family: 'Arvo', serif;
-  font-weight: lighter;
-  font-size: 25px;
-}
-
-.carte_cardtitle {
-  font-family: 'Bitter', serif;
-  font-weight: bold;
-}
-
-p {
-  font-family: 'Lato', sans-serif;
-  display: inline-block;
-  margin: 5px 1px;
-  font-size: 15px;
-}
-
-#carte_card {
-  border: solid 2px #000;
-  border-radius: 10px;
-  box-shadow: 1px 2px 10px #000;
-  background-color: #E9EEF2;
-  margin-left: 240px;
-  margin-top: 25px;
-  width: 550px;
-  height: 350px;
-}
-
-#card-title {
-  padding: 5px;
-  color: #fff;
-  letter-spacing: 2px;
-  text-align: center;
-  text-transform: uppercase;
-  background-color: #2C6C73;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-@page {
-  size: a4 portrait;
-  margin: 0mm 0mm 0mm 0mm;
-}
-#card-id {
-  padding: 5px;
-  display: flex;
-}
-
-#card-number{
-  display: inherit;
-  margin-right: 50px;
-}
-
-#card-information {
-  display: flex;
-  padding: 5px;
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  /* background-color: var(--dark-color-lighten); */
+  font-family: "Montserrat", sans-serif;
 }
 
 
-#card-detail {
-  display: flex;
+a {
+  text-decoration: none;
+}
+
+
+
+/*===== CARD =====*/
+.carte_container {
   
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
-
-.card-box {
-  margin-right: 20px;
-}
-
-#cardsign {
-  background: no-repeat url(https://fontmeme.com/permalink/200329/2719511201202ec68d51bbc66ea58d25.png);
-  background-position: center;
-  height: 38px;
+.carte_card {
+  position: relative;
+  padding: 1rem;
   width: 350px;
+  height: 450px;
+  box-shadow: -1px 15px 30px -12px rgb(32, 32, 32);
+  border-radius: 0.9rem;
+  background-color: var(--red-card);
+  color: var(--text);
+  cursor: pointer;
 }
 
-#card-code {
-  padding-top: 12px;
-  padding-bottom: 13px;
-  background-color: #fff;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+.product-info {
+  text-align: left;
+}
+.product-info_title {
+  text-align: center;
 }
 
+.product-info h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+.product-info p {
+  margin: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.client-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem; /* Espace entre les lignes */
+}
+
+.info-row {
+  display: flex;
+  align-items: left;
+  gap: 1rem;
+}
+
+
+
+
+.fav {
+  box-sizing: border-box;
+  background: #fff;
+  padding: 0.5rem 0.5rem;
+  border: 1px solid#000;
+  display: grid;
+  place-items: center;
+}
+
+.svg {
+  height: 25px;
+  width: 25px;
+  fill: #fff;
+  transition: all 500ms ease;
+}
+
+.fav:hover .svg {
+  fill: #000;
+}
+
+@media screen and (max-width: 800px) {
+  body {
+    height: auto;
+  }
+  .container {
+    padding: 2rem 0;
+    width: 100%;
+    flex-direction: column;
+    gap: 3rem;
+  }
+}

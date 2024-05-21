@@ -1,8 +1,10 @@
+from datetime import datetime
+from operator import or_
 from flask import render_template, request, redirect, url_for,flash
 from ..models import  Produit,Categorie,Client,Abonnement,TypeAbonnement,Coiffure,db
-from  ..forms.ArticleForms import AddArticleForm,AddCategorieForm
-from ..forms.ClientForms import AddClientForm
-from ..forms.CoiffureForms import AddCoiffureForm
+from  ..forms.ArticleForms import AddArticleForm,AddCategorieForm, EditArticleForm,SearchForm
+from ..forms.ClientForms import AddClientForm,SearchForm
+from ..forms.CoiffureForms import AddCoiffureForm, EditCoiffureForm,SearchForm
 from ..forms.TypeAbonnementForms import AddTypeAbonnementForm
 from ..forms.AbonnementForms import AddAbonnementForm
 from ..fileManager import save_uploaded_file
@@ -16,31 +18,27 @@ import os
 
 # gestionnaire = Blueprint('gestionnaire', __name__)
 
+#======== Produit ============
 
-@app.route('/ListerArticle')
+@app.route('/ListerArticle',methods=['GET', 'POST'])
 @login_required
 # @gestionnaire_required
 def ListerArticle():
+    form = SearchForm()
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
-    produits = Produit.query.paginate(page=page, per_page=10)  # Paginer les résultats, 10 éléments par page
-    return render_template('gestionnaire/article/ListerArticle.html', produits=produits)
-
-#======== Categorie ============
-@app.route('/Article/Categorie/List',methods=['GET', 'POST'])
-@login_required
-# @gestionnaire_required
-def ListerCategorie():
-    form = AddCategorieForm()
-    page = request.args.get('page', 1, type=int)
-    categories = Categorie.query.paginate(page=page, per_page=7)
     if form.validate_on_submit():
-        categorie = Categorie(nom=form.nom.data)
-        db.session.add(categorie)
-        db.session.commit()
-        return redirect(url_for('ListerCategorie'))
-    return render_template('gestionnaire/article/ListerCategorie.html', form=form, categories=categories)
+        search_query = form.search_query.data
+        produits = Produit.query.filter(Produit.nom.ilike(f'%{search_query}%')).paginate(page=page, per_page=5)
+    else:
+        produits = Produit.query.paginate(page=page, per_page=5)
 
-#======== Produit ============
+    return render_template('gestionnaire/article/ListerArticle.html', produits=produits,form=form)
+
+@app.route('/Galerie',methods=['GET','POST'])
+@login_required
+def Galery():
+    produits = Produit.query.all()
+    return render_template('gestionnaire/article/Galerie.html', produits=produits)
 
 @app.route('/Article/Add', methods=['GET','POST'])
 @login_required
@@ -60,19 +58,79 @@ def AddArticle():
         )
         db.session.add(produit)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('ListerArticle'))
     return render_template('gestionnaire/article/AjouterArticle.html',form=form)
 
 
-#======== coiffure ============ 
+@app.route('/Article/Edit/<int:produit_id>', methods=['GET', 'POST'])
+@login_required
+def EditArticle(produit_id):
+    produit = Produit.query.get_or_404(produit_id)
+    form = EditArticleForm(obj=produit) # charger l'objet  correspondant
+     # Charger les catégories disponibles dans le formulaire
+    form.categorie.choices = [(categorie.id, categorie.nom) for categorie in Categorie.query.all()]
+    if form.validate_on_submit():
+        if form.nom.data != produit.nom or form.prix.data != produit.prix or form.categorie.data != produit.categorie_id:
+            produit.nom = form.nom.data
+            produit.prix = form.prix.data
+            produit.qteStock = form.qte_stock.data
+            produit.photo = form.photo.data
+            produit.categorie_id = form.categorie.data
+            db.session.commit()
+            return redirect(url_for('ListerArticle'))
+        else:
+            
+            flash('Aucune modification détectée.', 'info')
+            return redirect(url_for('ListerArticle'))
+        # Pré-sélectionner la catégorie actuelle de l'article dans le formulaire
+    form.categorie.data = produit.categorie_id
+    # Pré-remplir la quantité en stock actuelle du produit dans le formulaire
+    form.qte_stock.data = produit.qteStock
 
-@app.route('/Client/List')
+    return render_template('gestionnaire/article/EditArticle.html', form=form, produit=produit)
+
+@app.route('/Article/Delete/<int:produit_id>', methods=['GET','POST'])
+@login_required
+def DeleteArticle(produit_id):
+    produit = Produit.query.get_or_404(produit_id)
+    db.session.delete(produit)
+    db.session.commit()
+    flash('L\'article a été supprimé avec succès.', 'success')
+    return redirect(url_for('ListerArticle'))
+
+#======== Categorie ============
+@app.route('/Article/Categorie/List',methods=['GET', 'POST'])
+@login_required
+# @gestionnaire_required
+def ListerCategorie():
+    form = AddCategorieForm()
+    page = request.args.get('page', 1, type=int)
+    categories = Categorie.query.paginate(page=page, per_page=5)
+    if form.validate_on_submit():
+        categorie = Categorie(nom=form.nom.data)
+        db.session.add(categorie)
+        db.session.commit()
+        return redirect(url_for('ListerCategorie'))
+    return render_template('gestionnaire/article/ListerCategorie.html', form=form, categories=categories)
+
+
+
+
+#======== Client ============ 
+
+@app.route('/Client/List',methods=['GET', 'POST'])
 @login_required
 # @gestionnaire_required
 def ListClient():
+    form = SearchForm()
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
-    clients = Client.query.paginate(page=page, per_page=10)  # Paginer les résultats, 10 éléments par page
-    return render_template('gestionnaire/client/ListClient.html', clients=clients)
+    if form.validate_on_submit():
+        search_query = form.search_query.data
+        #clients = Client.query.filter(Client.nom.ilike(f'%{search_query}%')).paginate(page=page, per_page=5)
+        clients = Client.query.filter(or_(Client.nom.ilike(f'%{search_query}%'), Client.prenom.ilike(f'%{search_query}%'))).paginate(page=page, per_page=5)
+    else:
+        clients = Client.query.paginate(page=page, per_page=5)
+    return render_template('gestionnaire/client/ListClient.html', clients=clients,form=form)
 
 
 @app.route('/Client/Add',methods=['GET','POST'])
@@ -92,16 +150,43 @@ def AddClient():
         return redirect(url_for('ListClient'))
     return render_template('gestionnaire/client/AddClient.html',form=form)
 
+@app.route('/Client/Edit/<int:client_id>', methods=['GET', 'POST'])
+@login_required
+def EditClient(client_id):
+    client = Client.query.get_or_404(client_id)
+    form = AddClientForm(obj=client)
+
+    if form.validate_on_submit():
+        form.populate_obj(client) # pour faire la modification 
+        db.session.commit()
+        return redirect(url_for('ListClient'))
+
+    return render_template('gestionnaire/client/EditClient.html', form=form, client=client)
+
+@app.route('/Client/Delete/<int:client_id>', methods=['GET','POST'])
+@login_required
+def DeleteClient(client_id):
+    client = Client.query.get_or_404(client_id)
+    db.session.delete(client)
+    db.session.commit()
+    return redirect(url_for('ListClient'))
 
 #======== coiffure ============
 
-@app.route('/Coiffure/List')
+@app.route('/CoiffureList',methods=['GET','POST'])
 @login_required
 # @gestionnaire_required
 def ListCoiffure():
+    form = SearchForm()
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
-    coiffures = Coiffure.query.paginate(page=page, per_page=10)  # Paginer les résultats, 10 éléments par page
-    return render_template('gestionnaire/coiffure/ListCoiffure.html', coiffures=coiffures)
+    if form.validate_on_submit():
+        search_query = form.search_query.data
+        print("Mot recherché :", search_query)
+        coiffures = Coiffure.query.filter(Coiffure.nom.ilike(f'%{search_query}%')).paginate(page=page, per_page=5)
+    else:
+        coiffures = Coiffure.query.paginate(page=page, per_page=5)
+
+    return render_template('gestionnaire/coiffure/ListCoiffure.html', coiffures=coiffures, form=form)
 
 
 @app.route('/Coiffure/Add',methods=['GET','POST'])
@@ -120,6 +205,26 @@ def AddCoiffure():
     return render_template('gestionnaire/coiffure/AddCoiffure.html',form=form)
 
 
+@app.route('/Coiffure/Edit/<int:coiffure_id>', methods=['GET', 'POST'])
+@login_required
+def EditCoiffure(coiffure_id):
+    coiffure = Coiffure.query.get_or_404(coiffure_id)
+    form = EditCoiffureForm(obj=coiffure) # charger l'objet coiffure correspondant
+    if form.validate_on_submit():
+        form.populate_obj(coiffure)
+        db.session.commit()
+        return redirect(url_for('ListCoiffure'))    
+    return render_template('gestionnaire/coiffure/EditCoiffure.html', form=form, coiffure=coiffure)
+
+@app.route('/Coiffure/Delete/<int:coiffure_id>', methods=['GET','POST'])
+@login_required
+def DeleteCoiffure(coiffure_id):
+    coiffure = Coiffure.query.get_or_404(coiffure_id)
+    db.session.delete(coiffure)
+    db.session.commit()
+    flash('La coiffure a été supprimée avec succès.', 'success')
+    return redirect(url_for('ListCoiffure'))
+
 #=== Abonnement =======
 
 @app.route('/Abonnement/Type/List')
@@ -127,7 +232,7 @@ def AddCoiffure():
 # @gestionnaire_required
 def ListTypeAbonnement():
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
-    abonnements = TypeAbonnement.query.paginate(page=page, per_page=10)  # Paginer les résultats, 10 éléments par page
+    abonnements = TypeAbonnement.query.paginate(page=page, per_page=5)  # Paginer les résultats, 10 éléments par page
     return render_template('gestionnaire/typeAbonnement/ListTypeAbonnement.html', abonnements=abonnements)
 
 
@@ -159,8 +264,9 @@ def AddTypeAbonnement():
 # @gestionnaire_required
 def ListAbonnement():
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
-    abonnements = Abonnement.query.paginate(page=page, per_page=10)  # Paginer les résultats, 10 éléments par page
+    abonnements = Abonnement.query.paginate(page=page, per_page=5)  # Paginer les résultats, 10 éléments par page
     return render_template('gestionnaire/abonnement/ListAbonnement.html', abonnements=abonnements)
+
 
 
 @app.route('/Abonnement/Add', methods=['GET', 'POST'])
@@ -177,6 +283,14 @@ def AddAbonnement():
         db.session.commit()
         return redirect(url_for('ListAbonnement'))
     return render_template('gestionnaire/abonnement/AddAbonnement.html', form=form)
+
+@app.route('/Abonnement/Delete/<int:abonnement_id>', methods=['GET','POST'])
+@login_required
+def DeleteAbonnement(abonnement_id):
+    abonnement = Abonnement.query.get_or_404(abonnement_id)
+    db.session.delete(abonnement)
+    db.session.commit()
+    return redirect(url_for('ListAbonnement'))
 
 # Details Abonnements 
 
@@ -203,8 +317,17 @@ def print_abonnement(id):
     pdf_bytes = HTML(string=rendered_template).write_pdf(
         stylesheets=[CSS(string='@page { size: A3 ; }')]
     )
-    # Chemin relatif pour enregistrer le PDF 
-    pdf_path = os.path.join(os.getcwd(), "output.pdf")
+     # Obtenir la date et l'heure actuelles
+    now = datetime.now()
+    date_str = now.strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Construire le nom de fichier avec le nom et prénom du client et la date
+    filename = f"facture_{abonnement.client.nom}_{date_str}.pdf"
+    filename = filename.replace(" ", "_")  # Remplacer les espaces par des underscores
+
+    # Chemin relatif pour enregistrer le PDF
+    pdf_path = os.path.join(os.getcwd(), filename)
+    
 
     # Enregistrer le PDF 
     with open(pdf_path, "wb") as f:
@@ -212,7 +335,7 @@ def print_abonnement(id):
     # Envoyer le fichier PDF en réponse à la requête 
     # avec as_attachment a true ,il telecharge directement le fichier si a false 
     # le fichier est d'abord visionner par le navigateur et on peut l'imprimer ou l'enregistrer en pdf 
-    return send_file(pdf_path, as_attachment=False) 
+    return send_file(pdf_path, as_attachment=True) 
 
 
 

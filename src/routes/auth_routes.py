@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect,url_for, request,flash
+from flask import Blueprint, render_template, redirect, session,url_for, request,flash
 from flask_login import login_user, logout_user, login_required,current_user,LoginManager
 from ..models import User,app
 from .gestionnaire_routes import ListerArticle
@@ -51,6 +51,7 @@ def test():
 @app.route('/logout')
 @login_required
 def logout():
+    session.clear()
     logout_user()
     return redirect(url_for('login'))
 

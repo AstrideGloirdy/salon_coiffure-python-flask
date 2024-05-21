@@ -15,6 +15,19 @@
                 </div>
                 
                 <div class="table-responsive mb-5">
+                  <div class="card-body d-flex">
+                    <li class="nav-item nav-search d-none d-md-block mr-0">
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Search..." aria-label="search" aria-describedby="search">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text mr-4" id="search">
+                              <i class="typcn typcn-zoom"></i>
+                            </span>
+                            <a href="{{ url_for('AddArticle') }}" class="btn btn-primary">Rechercher</a>
+                          </div>
+                        </div>
+                      </li>
+                  </div>
                   <table class="table table-hover table-striped text-center " style="font-size: x-small;">
                     <thead>
                         <tr>
@@ -43,19 +56,17 @@
                             <td>{{ abonnement.date_debut }}</td>
                             <td>{{ abonnement.date_fin }}</td>
                             <td>
-                              
-                              <a href="{{ url_for('DetailAbonnement', id=abonnement.id) }}" class="btn btn-primary">
-                                Details
-                              </a>
-                              <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3">
-                                  Edit
-                                  <i class="typcn typcn-edit btn-icon-append"></i>                          
-                                </button>
-                                <button type="button" class="btn btn-danger btn-sm btn-icon-text">
-                                  Delete
-                                  <i class="typcn typcn-delete-outline btn-icon-append"></i>                          
-                                </button>
+                              <div class="d-flex align-items-center mr-3">
+                                <a href="{{ url_for('DetailAbonnement', id=abonnement.id) }}" class="btn btn-success btn-sm btn-icon-text">
+                                  <i class="typcn typcn-document-text btn-icon-append"></i>
+                                  Details
+                                </a>
+                                <form action="{{ url_for('DeleteAbonnement', abonnement_id=abonnement.id) }}" method="post" class="delete-form">
+                                  <button type="submit" class="btn btn-danger btn-sm btn-icon-text">
+                                      Delete
+                                      <i class="typcn typcn-delete-outline btn-icon-append"></i>
+                                  </button>
+                                </form>
                               </div>
                             </td>
                         </tr>

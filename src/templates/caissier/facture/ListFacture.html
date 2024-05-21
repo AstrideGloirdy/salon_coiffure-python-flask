@@ -18,8 +18,10 @@
                         <tr>
                             <th>ID</th>
                             <th>Nom du Caissier</th>
+                            <th>Nom du Client</th>
                             <th>Montant Total</th>
-                            <th>Date et Heure</th>
+                            <th>Date</th>
+                            <th>Heure</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,11 +29,13 @@
                         <tr>
                            <td>{{facture.id}}</td>
                            <td>{{facture.user.nom}} {{facture.user.prenom}} </td>
+                           <td>{{facture.client.nom}} {{facture.user.prenom}} </td>
                            <td>{{facture.montant_total }} FCFA</td>
-                           <td>{{ facture.date.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                           <td>{{ facture.date.strftime('%d/%m/%Y') }}</td>
+                           <td>{{ facture.date.strftime('%H:%M:%S') }}</td>
                           
                             <td>
-                              <a href="{{ url_for('DetailFacture', id=facture.id) }}" class="btn btn-primary">
+                              <a href="{{ url_for('DetailFacture', facture_id=facture.id) }}" class="btn btn-primary">
                                 Details
                               </a>
                             </td>

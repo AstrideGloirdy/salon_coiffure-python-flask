@@ -112,9 +112,13 @@ class DetailsFacture(db.Model):
 class Facture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     montant_total = db.Column(db.Float, nullable=False)
+    montant_paye = db.Column(db.Float, nullable=False)
+    montant_rendu = db.Column(db.Float, nullable=True)
     date = db.Column(db.DateTime, nullable=False)
     user = db.relationship("User", backref="factures")
+    client = db.relationship("Client", backref="factures")
     details = db.relationship("DetailsFacture", backref="facture")
 
 

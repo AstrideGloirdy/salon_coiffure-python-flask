@@ -9,7 +9,7 @@
   
   <title>{% block title %}Gestion Salon de coiffure {% endblock %}</title>
  
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='template/vendors/typicons/typicons.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='template/vendors/css/vendor.bundle.base.css') }}">
     <!-- endinject -->
@@ -37,7 +37,7 @@
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="navbar-brand-wrapper d-flex justify-content-center">
         <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
-          <a class="navbar-brand brand-logo" href="#"><img src="images/logo.svg" alt="logo"/></a>
+          <a class="navbar-brand brand-logo" href="#"> <img src="{{ url_for('static', filename='assets/img/logos/salon.png') }}"   style="width: 40%; height: auto;" alt="logo"></a>
          
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="typcn typcn-th-menu"></span>
@@ -129,13 +129,6 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           {% if current_user.is_authenticated and current_user.role.name == 'gestionnaire' %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('ListerArticle') }}">
-              <i class="typcn typcn-device-desktop menu-icon"></i>
-              <span class="menu-title">Dashboard</span>
-              <div class="badge badge-danger">Home</div>
-            </a>
-          </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#article" aria-expanded="false" aria-controls="ui-basic">
               <i class="typcn typcn-document-text menu-icon"></i>
@@ -238,6 +231,18 @@
               <span class="menu-title">Voir la caisse</span>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('list_ventes_produits') }}">
+              <i class="mdi mdi-basket"></i>
+              <span class="menu-title">Voir les ventes</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('list_coiffures') }}">
+              <i class="mdi mdi-basket"></i>
+              <span class="menu-title">Voir les prestations</span>
+            </a>
+          </li>
           {% endif %}
           
         </ul>
@@ -282,7 +287,7 @@
   </div>
   <!-- container-scroller -->
 
-  {% block javascript %}
+ 
     <!-- base:js -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
@@ -314,7 +319,7 @@
         });
       });
     </script>
-  {% endblock %}
+
 </body>
 
 </html>

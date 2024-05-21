@@ -10,8 +10,7 @@ class AddAbonnementForm(FlaskForm):
         choices=[],
         validators=[
             DataRequired(message="Veuillez sélectionner un client"),
-        ],
-        render_kw={"class": "select2"}
+        ]
     )
 
     type_abonnement_id = SelectField(
@@ -20,8 +19,7 @@ class AddAbonnementForm(FlaskForm):
         choices=[],
         validators=[
             DataRequired(message="Veuillez sélectionner un type d'abonnement"),
-        ],
-        render_kw={"class": "select2"}
+        ]
     )
 
     

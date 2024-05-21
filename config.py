@@ -13,4 +13,4 @@ SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "gestion.sqlite")
 
 #----- Fichier de telecharement des photos 
 
-UPLOAD_FOLDER = './src/Upload'
+UPLOAD_FOLDER = './src/static/Upload'

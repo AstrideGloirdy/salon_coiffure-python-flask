@@ -52,3 +52,4 @@ def error():
 @app.route('/Ast')
 def error1():
    return render_template('errors/error-500.html')
+

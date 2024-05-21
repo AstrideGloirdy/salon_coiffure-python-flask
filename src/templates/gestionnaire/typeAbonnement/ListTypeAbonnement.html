@@ -9,7 +9,7 @@
             <div class="card-body">
                 <div class="card-body d-flex align-items-center">
                     <h4 class="card-title flex-grow-1">Liste des differents types d'abonnement</h4>
-                    <a href="{{ url_for('gestionnaire.AddTypeAbonnement') }}" class="btn btn-info ml-auto">Nouveau</a>
+                    <a href="{{ url_for('AddTypeAbonnement') }}" class="btn btn-info ml-auto">Nouveau</a>
                 </div>
                 <!-- -->
               <div class="row">
@@ -64,17 +64,16 @@
                 <nav aria-label="Page navigation example mt-4">
                   <ul class="pagination">
                     {% if abonnements.has_prev %}
-                      <li class="page-item"><a class="page-link" href="{{ url_for('gestionnaire.ListTypeAbonnement', page=abonnements.prev_num) }}">Previous</a></li>
+                      <li class="page-item"><a class="page-link" href="{{ url_for('ListTypeAbonnement', page=abonnements.prev_num) }}">Previous</a></li>
                     {% else %}
                       <li class="page-item disabled"><span class="page-link">Previous</span></li>
                     {% endif %}
-                
                     {% for page_num in abonnements.iter_pages() %}
                       {% if page_num %}
                         {% if abonnements.page == page_num %}
                           <li class="page-item active" aria-current="page"><span class="page-link">{{ page_num }}</span></li>
                         {% else %}
-                          <li class="page-item"><a class="page-link" href="{{ url_for('gestionnaire.ListTypeAbonnement', page=page_num) }}">{{ page_num }}</a></li>
+                          <li class="page-item"><a class="page-link" href="{{ url_for('ListTypeAbonnement', page=page_num) }}">{{ page_num }}</a></li>
                         {% endif %}
                       {% else %}
                         <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -82,7 +81,7 @@
                     {% endfor %}
                 
                     {% if abonnements.has_next %}
-                      <li class="page-item"><a class="page-link" href="{{ url_for('gestionnaire.ListTypeAbonnement', page=abonnements.next_num) }}">Next</a></li>
+                      <li class="page-item"><a class="page-link" href="{{ url_for('ListTypeAbonnement', page=abonnements.next_num) }}">Next</a></li>
                     {% else %}
                       <li class="page-item disabled"><span class="page-link">Next</span></li>
                     {% endif %}

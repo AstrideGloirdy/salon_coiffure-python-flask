@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,IntegerField,SelectField,FileField,TextAreaField
+from wtforms import StringField,IntegerField,SelectField,FileField, SubmitField,TextAreaField
 from wtforms.validators import DataRequired, NumberRange,Length,InputRequired
 
 
@@ -35,3 +35,10 @@ class AddClientForm(FlaskForm):
 
    
  
+class SearchForm(FlaskForm):
+    search_query = StringField(
+        'Recherche',
+        render_kw={"class": "form-control",
+                    "aria-label": "search", 
+                    "aria-describedby": "search"})
+    submit = SubmitField('Rechercher', render_kw={"class": "btn btn-primary"})

@@ -5,9 +5,22 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Ajouter une facture</h4>
+                <h4 class="card-title">Faire une facture</h4>
                 <form method="POST">
                     {{ form.hidden_tag() }}
+                    <div class="form-inline mt-2 mb-2">
+                        <div class="form-group ">
+                            {{ form.client.label(class="form-control-label mb-2 mr-sm-2") }}
+                            {% if form.client.errors %}
+                                <ul class="errors">
+                                    {% for error in form.client.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {{ form.client(class="form-control mb-2 mr-sm-2") }}
+                        </div>
+                    </div>
                     <div class="form-inline mt-2 mb-2">
                         <div class="form-group">
                             {{ form.produit.label(class="form-control-label mb-2 mr-sm-2") }}
@@ -66,7 +79,6 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Détails de la Facture</h4>
                                 <table class="table  table-hover">
                                     <thead>
                                         <tr>
@@ -101,21 +113,37 @@
                            
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-19 ml-4 mt-2 mb-2">
+                            <div class="card">
+                                <div class="card-body">
                     <!-- Montant total de la facture -->
                     
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title ">Montant Total</h4>
-                        <p class="text-success font-weight-bold ">{{ montant_total }} FCFA</p>
+                                    <h4 class="card-title ">Montant Total</h4>
+                                    <p class="text-success font-weight-bold ">{{ montant_total }} FCFA</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
+
+                    <div class="row  ml-auto mr-3">
+                        <div class="col-md-19 ml-4 mt-2 mb-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form method="POST" action="{{ url_for('AddFacture') }}">
+                                        <div class="form-group">
+                                            <label for="montant_paye">Montant payé :</label>
+                                            <input type="number" class="form-control" id="montant_paye" name="montant_paye" value="{{ montant_paye }}" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    </form>
+                            
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
-            </div>
-            <div class="form-group ml-4">
-                <form method="POST" action="{{ url_for('AddFacture') }}">
-                    <button type="submit" name="Enregistrer" class="btn btn-success">Enregistrer</button>
-                </form>
             </div>
         </div>
     </div>

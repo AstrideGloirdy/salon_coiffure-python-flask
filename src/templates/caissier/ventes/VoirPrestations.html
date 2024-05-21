@@ -1,0 +1,87 @@
+{% extends "layouts/base.html" %}
+<!-- Lister produits  -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- <h4 class="card-title">Liste des produits</h4>
+                <button type="button" class="btn btn-info float-right">Nouveau</button> -->
+                <div class="card-body d-flex align-items-center">
+                    <h4 class="card-title flex-grow-1">Liste des coiffures / prestations réalisés </h4>
+                    <a href="{{ url_for('AddFacture') }}" class="btn btn-info ml-auto">Nouveau</a>
+                </div>
+                
+                <div class="table-responsive mb-5">
+                  <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nom de la coiffure</th>
+                            <th>prix</th>
+                            <th>quantite</th>
+                            <th>Montant Total</th>
+                            <th>Date</th>
+                            <th>Heure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detail in coiffures %}
+                            <tr>
+                                <td>{{ detail.coiffure.nom }}</td>
+                                <td>{{ detail.coiffure.prix }}</td>
+                                <td>{{ detail.quantite_coiffure }}</td>
+                                <td>{{ detail.coiffure.prix * detail.quantite_coiffure }}</td>
+                                <td>{{ detail.facture.date.strftime('%d-%m-%Y') }}</td>
+                                <td>{{ detail.facture.date.strftime('%H:%M:%S') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                <nav aria-label="Page navigation example mt-4">
+                    <ul class="pagination">
+                        {% if coiffures_paginated.has_prev %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('list_coiffures', page=coiffures_paginated.prev_num) }}">Previous</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                        {% endif %}
+        
+                        {% for page_num in coiffures_paginated.iter_pages() %}
+                            {% if page_num %}
+                                {% if coiffures_paginated.page == page_num %}
+                                    <li class="page-item active" aria-current="page"><span class="page-link">{{ page_num }}</span></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('list_coiffures', page=page_num) }}">{{ page_num }}</a></li>
+                                {% endif %}
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                        {% endfor %}
+        
+                        {% if coiffures_paginated.has_next %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('list_coiffures', page=coiffures_paginated.next_num) }}">Next</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">Next</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            
+        
+        </div>
+    
+    </div>
+    
+      
+</div>
+
+    {% block javascript %}
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        
+    {% endblock %}
+
+
+{% endblock %}
+
+    
+    

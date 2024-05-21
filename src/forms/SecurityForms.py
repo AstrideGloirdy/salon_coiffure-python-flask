@@ -16,7 +16,7 @@ class LoginForm(FlaskForm):
                              validators=[
                                 DataRequired(message="Le mot de passe incorrecte"),
                                 Length(min=6),
-                                InputRequired()])
+                                InputRequired(message="Le password est obligatoire")])
     
     submit = SubmitField('Login')
 

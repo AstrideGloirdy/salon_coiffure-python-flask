@@ -28,7 +28,8 @@
                           <tr>
                             <th class="ml-5">ID</th>
                             <th>Montant</th>
-                            <th>Date et heure </th>
+                            <th>Date</th>
+                            <th>Heure</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -36,7 +37,8 @@
                           <tr>
                             <td>{{caisse.id}}</td>
                             <td>{{caisse.montant_total}} FCFA</td>
-                            <td>{{caisse.date.strftime('%d-%m-%Y %H:%M:%S')}}</td>
+                            <td>{{caisse.date.strftime('%d-%m-%Y')}}</td>
+                            <td>{{caisse.date.strftime('%H:%M:%S')}}</td>
                             
                           </tr>
                           {% endfor %}
