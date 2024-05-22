@@ -5,13 +5,9 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                
-                <!-- <h4 class="card-title">Liste des produits</h4>
-                <button type="button" class="btn btn-info float-right">Nouveau</button> -->
                 <div class="card-body d-flex align-items-center">
                     <h4 class="card-title flex-grow-1">Liste des articles</h4>
                     <a href="{{ url_for('AddArticle') }}" class="btn btn-primary ml-auto">Nouveau</a>
-                    
                 </div>
 
                 <div class="table-responsive mb-5">
@@ -39,7 +35,6 @@
                                 <th>Quantité en Stock</th>
                                 <th>Catégorie</th>
                                 <th>Actions</th>
-                                <!-- <th>Approvisionnement</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -64,12 +59,16 @@
                                 </td>
                                 <td>{{ produit.categorie.nom }}</td>
                                 <td>
-                                  
                                     <div class="d-flex align-items-center">
                                       <a href="{{ url_for('EditArticle', produit_id=produit.id) }}" class="btn btn-success btn-sm btn-icon-text mr-3">
                                         Edit
                                         <i class="typcn typcn-edit btn-icon-append"></i>
                                      </a>
+                                     <button type="button" class="btn btn-warning btn-sm btn-icon-text mr-3" data-toggle="modal" data-target="#approModal-{{ produit.id }}">
+                                      Apro
+                                      <i class="typcn typcn-arrow-sync btn-icon-append"></i>
+                                     </button>
+                                      
                                       <form action="{{ url_for('DeleteArticle', produit_id=produit.id) }}" method="post" class="delete-form">
                                         <button type="submit" class="btn btn-danger btn-sm btn-icon-text">
                                             Delete
@@ -77,10 +76,43 @@
                                         </button>
                                       </form>
                                     </div>
-                                   
                                 </td>
-                                
                             </tr>
+                             <!-- Modal -->
+                             <div class="modal fade" id="approModal-{{ produit.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">Approvisionner {{ produit.nom }}</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                          </button>
+                                      </div>
+                                      <form method="POST" action="{{ url_for('AproArticle', produit_id=produit.id) }}">
+                                          <div class="modal-body">
+                                              {{ appro_form.hidden_tag() }}
+                                              <div class="form-group">
+                                                  {{ appro_form.qte_appro.label(class="form-control-label") }}
+                                                  {{ appro_form.qte_appro(class="form-control") }}
+                                                  {% if appro_form.qte_appro.errors %}
+                                                      <ul class="errors">
+                                                          {% for error in form.qte_appro.errors %}
+                                                              <li>{{ error }}</li>
+                                                          {% endfor %}
+                                                      </ul>
+                                                  {% endif %}
+                                              </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                              <div class="form-group ml-4 ">
+                                                {{ appro_form.submit(class="btn btn-primary") }}
+                                              </div>
+                                          </div>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -112,16 +144,9 @@
                       {% endif %}
                     </ul>
                 </nav> 
-                
-                
             </div>
-            
-        
         </div>
-    
     </div>
-    
-      
 </div>
 
 

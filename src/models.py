@@ -159,6 +159,18 @@ class User(db.Model, UserMixin):
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
     role = db.relationship('Role', backref=db.backref('users', lazy=True))
 
+
+class Approvisionnement(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    produit_id = db.Column(db.Integer, db.ForeignKey('produit.id'), nullable=False)
+    produit = db.relationship('Produit', backref=db.backref('approvisionnements', lazy=True))
+    qte_actuelle = db.Column(db.Integer, nullable=False)
+    qte_ajoutee = db.Column(db.Integer, nullable=False)
+    date_heure = db.Column(db.DateTime, default=datetime.datetime.now(), nullable=False)
+    montant = db.Column(db.Float, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('approvisionnements', lazy=True))
+
     
     
 # ============= LES FONCTIONS POUR LA TABLE PRODUIT ============= 

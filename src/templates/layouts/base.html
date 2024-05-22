@@ -37,8 +37,8 @@
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="navbar-brand-wrapper d-flex justify-content-center">
         <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
-          <a class="navbar-brand brand-logo" href="#"> <img src="{{ url_for('static', filename='assets/img/logos/salon.png') }}"   style="width: 40%; height: auto;" alt="logo"></a>
-         
+          <a class="navbar-brand brand-logo" href="#"> <img src="{{ url_for('static', filename='assets/img/logos/salon1.png') }}"   style="width: 40%; height: auto;" alt="logo"></a>
+          
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="typcn typcn-th-menu"></span>
           </button>
@@ -134,8 +134,8 @@
             </a>
             <div class="collapse" id="abo">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{ url_for('AddAbonnement') }}">Ajouter un abonnement </a></li>
-                <li class="nav-item"> <a class="nav-link" href="{{ url_for('ListAbonnement') }}">Liste des abonnements</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{ url_for('AddAbonnement') }}">Ajouter  </a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{ url_for('ListAbonnement') }}">Lister</a></li>
                 
               </ul>
             </div>
@@ -182,6 +182,13 @@
               <a class="nav-link" href="{{ url_for('Galerie') }}">
                 <i class="typcn typcn-image menu-icon"></i>
                 <span class="menu-title">Galerie</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('ListApro') }}">
+                <i class="typcn typcn-arrow-sync menu-icon"></i>
+
+                <span class="menu-arrow">Approvisionnements </span>
               </a>
             </li>
           </li>
@@ -244,6 +251,7 @@
               <span class="menu-arrow">Lister les abonnements </span>
             </a>
           </li>
+          
           
           {% endif %}
           
@@ -311,15 +319,6 @@
     <!--  Select2 JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
-   
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        $('.js-example-basic-single').select2({
-          width: 'resolve'
-        });
-      });
-    </script>
 
 </body>
 

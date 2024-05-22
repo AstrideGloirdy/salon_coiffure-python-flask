@@ -70,3 +70,7 @@ class SearchForm(FlaskForm):
                     "aria-label": "search", 
                     "aria-describedby": "search"})
     submit = SubmitField('Rechercher', render_kw={"class": "btn btn-primary"})
+
+class ApprovisionnementForm(FlaskForm):
+    qte_appro = IntegerField('Quantité à approvisionner', validators=[DataRequired(), NumberRange(min=1)])
+    submit = SubmitField('Approvisionner')

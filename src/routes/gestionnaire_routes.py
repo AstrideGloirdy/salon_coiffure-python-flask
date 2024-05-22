@@ -1,8 +1,9 @@
 from datetime import datetime
 from operator import or_
-from flask import render_template, request, redirect, url_for,flash
-from ..models import  Produit,Categorie,Client,Abonnement,TypeAbonnement,Coiffure,db
-from  ..forms.ArticleForms import AddArticleForm,AddCategorieForm, EditArticleForm,SearchForm
+from flask import render_template, request, redirect, url_for
+from flask_login import current_user
+from ..models import  Approvisionnement, Produit,Categorie,Client,Abonnement,TypeAbonnement,Coiffure,db
+from  ..forms.ArticleForms import AddArticleForm,AddCategorieForm, ApprovisionnementForm, EditArticleForm,SearchForm
 from ..forms.ClientForms import AddClientForm,SearchForm
 from ..forms.CoiffureForms import AddCoiffureForm, EditCoiffureForm,SearchForm
 from ..forms.TypeAbonnementForms import AddTypeAbonnementForm
@@ -16,13 +17,11 @@ from .auth_routes import login_required
 import os
 
 
-# gestionnaire = Blueprint('gestionnaire', __name__)
 
 #======== Produit ============
 
 @app.route('/ListerArticle',methods=['GET', 'POST'])
 @login_required
-# @gestionnaire_required
 def ListerArticle():
     form = SearchForm()
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
@@ -31,8 +30,8 @@ def ListerArticle():
         produits = Produit.query.filter(Produit.nom.ilike(f'%{search_query}%')).paginate(page=page, per_page=5)
     else:
         produits = Produit.query.paginate(page=page, per_page=5)
-
-    return render_template('gestionnaire/article/ListerArticle.html', produits=produits,form=form)
+    appro_form = ApprovisionnementForm()  # Initialiser le formulaire d'approvisionnement
+    return render_template('gestionnaire/article/ListerArticle.html', produits=produits,form=form,appro_form=appro_form)
 
 @app.route('/Galerie',methods=['GET','POST'])
 @login_required
@@ -42,7 +41,6 @@ def Galerie():
 
 @app.route('/Article/Add', methods=['GET','POST'])
 @login_required
-# @gestionnaire_required
 def AddArticle():
     form = AddArticleForm()
     form.categorie.choices = [(cat.id, cat.nom) for cat in Categorie.query.all()]
@@ -79,12 +77,8 @@ def EditArticle(produit_id):
             db.session.commit()
             return redirect(url_for('ListerArticle'))
         else:
-            
-            flash('Aucune modification détectée.', 'info')
             return redirect(url_for('ListerArticle'))
-        # Pré-sélectionner la catégorie actuelle de l'article dans le formulaire
     form.categorie.data = produit.categorie_id
-    # Pré-remplir la quantité en stock actuelle du produit dans le formulaire
     form.qte_stock.data = produit.qteStock
 
     return render_template('gestionnaire/article/EditArticle.html', form=form, produit=produit)
@@ -95,13 +89,41 @@ def DeleteArticle(produit_id):
     produit = Produit.query.get_or_404(produit_id)
     db.session.delete(produit)
     db.session.commit()
-    flash('L\'article a été supprimé avec succès.', 'success')
     return redirect(url_for('ListerArticle'))
+
+#Approvisonnement
+@app.route('/Article/Approvisionnement/<int:produit_id>', methods=['GET', 'POST'])
+@login_required
+def AproArticle(produit_id):
+    produit = Produit.query.get_or_404(produit_id)
+    appro_form = ApprovisionnementForm()
+    if appro_form.validate_on_submit():
+        qte_ajoutee = appro_form.qte_appro.data
+        montant = produit.prix * qte_ajoutee
+        approvisionnement = Approvisionnement(
+            produit_id=produit.id,
+            qte_actuelle=produit.qteStock,
+            qte_ajoutee=qte_ajoutee,
+            montant=montant,
+            user_id=current_user.id
+        )
+        db.session.add(approvisionnement)
+        produit.qteStock += qte_ajoutee
+        db.session.commit()
+        return redirect(url_for('ListerArticle'))
+    return render_template('gestionnaire/article/ListerArticle.html',appro_form=appro_form)
+
+@app.route('/Article/Approvisionnement/List',methods=['GET', 'POST'])
+@login_required
+def ListApro():
+    page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
+    apros = Approvisionnement.query.paginate(page=page, per_page=5)
+    
+    return render_template('gestionnaire/article/ListApro.html', apros=apros)
 
 #======== Categorie ============
 @app.route('/Article/Categorie/List',methods=['GET', 'POST'])
 @login_required
-# @gestionnaire_required
 def ListerCategorie():
     form = AddCategorieForm()
     page = request.args.get('page', 1, type=int)
@@ -120,13 +142,11 @@ def ListerCategorie():
 
 @app.route('/Client/List',methods=['GET', 'POST'])
 @login_required
-# @gestionnaire_required
 def ListClient():
     form = SearchForm()
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
     if form.validate_on_submit():
         search_query = form.search_query.data
-        #clients = Client.query.filter(Client.nom.ilike(f'%{search_query}%')).paginate(page=page, per_page=5)
         clients = Client.query.filter(or_(Client.nom.ilike(f'%{search_query}%'), Client.prenom.ilike(f'%{search_query}%'))).paginate(page=page, per_page=5)
     else:
         clients = Client.query.paginate(page=page, per_page=5)
@@ -135,7 +155,6 @@ def ListClient():
 
 @app.route('/Client/Add',methods=['GET','POST'])
 @login_required
-# @gestionnaire_required
 def AddClient():
     form = AddClientForm()
     if form.validate_on_submit():
@@ -175,7 +194,6 @@ def DeleteClient(client_id):
 
 @app.route('/CoiffureList',methods=['GET','POST'])
 @login_required
-# @gestionnaire_required
 def ListCoiffure():
     form = SearchForm()
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
@@ -191,7 +209,6 @@ def ListCoiffure():
 
 @app.route('/Coiffure/Add',methods=['GET','POST'])
 @login_required
-# @gestionnaire_required
 def AddCoiffure():
     form = AddCoiffureForm()
     if form.validate_on_submit():
@@ -222,14 +239,12 @@ def DeleteCoiffure(coiffure_id):
     coiffure = Coiffure.query.get_or_404(coiffure_id)
     db.session.delete(coiffure)
     db.session.commit()
-    flash('La coiffure a été supprimée avec succès.', 'success')
     return redirect(url_for('ListCoiffure'))
 
 #=== Abonnement =======
 
 @app.route('/Abonnement/Type/List')
 @login_required
-# @gestionnaire_required
 def ListTypeAbonnement():
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
     abonnements = TypeAbonnement.query.paginate(page=page, per_page=5)  # Paginer les résultats, 10 éléments par page
@@ -238,7 +253,6 @@ def ListTypeAbonnement():
 
 @app.route('/Abonnement/Type/Add', methods=['GET', 'POST'])
 @login_required
-# @gestionnaire_required
 def AddTypeAbonnement():
     form = AddTypeAbonnementForm()
     form.coiffure_id.choices = [(coiffure.id, coiffure.nom) for coiffure in Coiffure.query.all()]
@@ -261,7 +275,6 @@ def AddTypeAbonnement():
 
 @app.route('/Abonnement/List')
 @login_required
-# @gestionnaire_required
 def ListAbonnement():
     page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
     abonnements = Abonnement.query.paginate(page=page, per_page=5)  # Paginer les résultats, 10 éléments par page
@@ -271,7 +284,6 @@ def ListAbonnement():
 
 @app.route('/Abonnement/Add', methods=['GET', 'POST'])
 @login_required
-# @gestionnaire_required
 def AddAbonnement():
     form = AddAbonnementForm()
     if form.validate_on_submit():
@@ -296,38 +308,26 @@ def DeleteAbonnement(abonnement_id):
 
 @app.route('/Abonnement/details/<int:id>', methods=['GET'])
 @login_required
-# @gestionnaire_required
 def DetailAbonnement(id):
     abonnement = Abonnement.query.get_or_404(id)
     return render_template('gestionnaire/abonnement/DetailAbonnement.html', abonnement=abonnement)
 
 
 
-#__________________________
-
-
-
 @app.route('/Abonnement/details/<int:id>/print', methods=['GET'])
 @login_required
-# @gestionnaire_required
 def print_abonnement(id):
     abonnement = Abonnement.query.get_or_404(id)
     rendered_template = render_template('gestionnaire/abonnement/carte.html', abonnement=abonnement)
-    # Générer le PDF à partir du modèle HTML en spécifiant la taille et l'orientation de la page 
     pdf_bytes = HTML(string=rendered_template).write_pdf(
         stylesheets=[CSS(string='@page { size: A3 ; }')]
     )
-    
     now = datetime.now()
     date_str = now.strftime("%Y-%m-%d_%H-%M-%S")
-
-    # Construire le nom de fichier avec le nom et prénom du client et la date
     filename = f"facture_{abonnement.client.nom}_{date_str}.pdf"
-    filename = filename.replace(" ", "_")  # Remplacer les espaces par des underscores
-
-    # Chemin relatif pour enregistrer le PDF
+    filename = filename.replace(" ", "_")  
+    # chemin pour enregistrer le PDF
     pdf_path = os.path.join(os.getcwd(), filename)
-    
     # Enregistrer le PDF 
     with open(pdf_path, "wb") as f:
         f.write(pdf_bytes)

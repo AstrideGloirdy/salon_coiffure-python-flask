@@ -49,16 +49,5 @@
     </div>   
 </div>
 
-  {% block javascript %}
-      <script>
-          // Afficher un message Toastr de succès
-          toastr.success("{{ get_flashed_messages()[0] }}");
-          toastr.options.timeOut = 30; // How long the toast will display without user interaction
-          toastr.options.extendedTimeOut = 60; // How long the toast will display after a user hovers over it
-          toastr.options.showMethod = 'slideDown';
-          toastr.options.hideMethod = 'slideUp';
-          toastr.options.closeMethod = 'slideUp';
-      </script>
-  {% endblock %}
 {% endblock %}
 
