@@ -1,7 +1,8 @@
-from flask import render_template,request,redirect,url_for,jsonify,session
-from ..models import app,Facture,Client,Abonnement,Coiffure,Produit,db,DetailsFacture,Caisse 
+from flask import json, render_template,request,redirect,url_for,jsonify,session
+from sqlalchemy import func
+from ..models import PaiementAbo, app,Facture,Client,Abonnement,Coiffure,Produit,db,DetailsFacture,Caisse 
 from .auth_routes import login_required,current_user
-from ..forms.FactureForms import AddFactureForm,AddPaiementForm
+from ..forms.FactureForms import AddFactureForm, AddPaiementAbo,AddPaiementForm
 from sqlalchemy.orm import object_mapper
 from datetime import datetime
 
@@ -119,6 +120,85 @@ def DetailFacture(facture_id):
     return render_template('caissier/facture/Facture.html', facture=facture,details=details)
 
 
+#Paiement de l'abonnement 
+
+@app.route('/PaiementAbo/List', methods=['GET'])
+@login_required
+def ListPaiement():
+    page = request.args.get('page', 1, type=int)  
+    paiements= PaiementAbo.query.paginate(page=page, per_page=10) 
+    return render_template('caissier/abonnement/ListPaiement.html',paiements=paiements)
+
+
+
+def set_abonnement_session(abonnement):
+    session['abonnement'] = json.dumps({
+        'id': abonnement.id,
+        'client_id': abonnement.client_id,
+        'type_abonnement_id': abonnement.type_abonnement_id,
+        'date_debut': abonnement.date_debut.isoformat(),
+        'date_fin': abonnement.date_fin.isoformat(),
+        'is_paye': abonnement.is_paye,
+        'is_valide': abonnement.is_valide,
+        'montant': abonnement.montant
+    })
+    session['client_id'] = abonnement.client_id
+
+def get_abonnement_session():
+    abonnement_json = session.get('abonnement')
+    if abonnement_json:
+        abonnement_data = json.loads(abonnement_json)
+        return Abonnement.query.get(abonnement_data['id'])
+    return None
+
+@app.route('/PaiementAbo/Add', methods=['GET', 'POST'])
+@login_required
+def AddPaiement():
+    form = AddPaiementAbo()
+    form.client.choices = [(client.id, f"{client.nom} {client.prenom}") for client in Client.query.all()]
+
+    if form.validate_on_submit():
+        client_id = form.client.data
+        abonnement = Abonnement.query.filter_by(client_id=client_id).first()
+        if abonnement:
+            set_abonnement_session(abonnement)
+            return render_template('caissier/abonnement/AddPaiement.html', form=form, abonnement=abonnement)
+
+    if request.method == 'POST':
+        abonnement = get_abonnement_session()
+        if abonnement:
+            montant_paye = int(request.form['montant_paye'])
+            montant_total = abonnement.montant
+            montant_rendu = montant_paye - montant_total if montant_paye > montant_total else 0
+            if montant_paye >= montant_total:
+                paiement = PaiementAbo(
+                    user_id=current_user.id,
+                    abonnement_id=abonnement.id,
+                    montant_paye=montant_paye,
+                    montant_rendu=montant_rendu
+                )
+                db.session.add(paiement)
+                abonnement.is_paye = True
+                db.session.commit()
+                
+                caisse = Caisse(montant_total=abonnement.montant)
+                db.session.add(caisse)
+                db.session.commit()
+                
+                session.pop('abonnement', None)
+                session.pop('client_id', None)
+                return redirect(url_for('ListPaiement'))
+
+    return render_template('caissier/abonnement/AddPaiement.html', form=form)
+
+@app.route('/PaiementAbo/details/<int:paiement_id>', methods=['GET'])
+@login_required
+def DetailPaiement(paiement_id):
+    paiement = PaiementAbo.query.get_or_404(paiement_id)
+    return render_template('caissier/abonnement/FactureAbo.html', paiement=paiement)
+
+
+# caisse 
 @app.route('/Caisse/')
 @login_required
 def VoirCaisse():
@@ -129,24 +209,14 @@ def VoirCaisse():
 
 
 
-
-
 @app.route('/Ventes')
 @login_required
 def list_ventes_produits():
-
     page = request.args.get('page', 1, type=int)
-    per_page = 2  # Nombre d'éléments par page
-
-    # Requête pour obtenir les détails des factures concernant les produits
+    per_page = 2  
     produits_query = db.session.query(DetailsFacture).filter(DetailsFacture.produit_id.isnot(None)).join(Facture).order_by(Facture.date.desc())
-
-    # Paginer les résultats
     produits_paginated = produits_query.paginate(page=page, per_page=per_page)
-
-    # Liste des éléments à afficher
     produits = produits_paginated.items
-
     return render_template('caissier/ventes/VoirVentes.html', produits=produits, produits_paginated=produits_paginated)
  
 
@@ -155,15 +225,12 @@ def list_ventes_produits():
 def list_coiffures():
     page = request.args.get('page', 1, type=int)
     per_page = 3  # Nombre d'éléments par page
-
-    # Requête pour obtenir les détails des factures concernant les coiffures
     coiffures_query = db.session.query(DetailsFacture).filter(DetailsFacture.coiffure_id.isnot(None)).join(Facture).order_by(Facture.date.desc())
-
-    # Paginer les résultats
     coiffures_paginated = coiffures_query.paginate(page=page, per_page=per_page)
-
-    # Liste des éléments à afficher
     coiffures = coiffures_paginated.items
 
     return render_template('caissier/ventes/VoirPrestations.html', coiffures=coiffures, coiffures_paginated=coiffures_paginated)
     
+
+
+

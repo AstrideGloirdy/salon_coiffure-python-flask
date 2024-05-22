@@ -80,24 +80,7 @@
     
     <div class="container-fluid page-body-wrapper">
       <!-- partial:partials/_settings-panel.html -->
-      <div class="theme-setting-wrapper">
-        <div id="settings-trigger"><i class="typcn typcn-cog-outline"></i></div>
-        <div id="theme-settings" class="settings-panel">
-          <i class="settings-close typcn typcn-times"></i>
-          <p class="settings-heading">SIDEBAR SKINS</p>
-          <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
-          <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
-          <p class="settings-heading mt-2">HEADER SKINS</p>
-          <div class="color-tiles mx-0 px-4">
-            <div class="tiles success"></div>
-            <div class="tiles warning"></div>
-            <div class="tiles danger"></div>
-            <div class="tiles info"></div>
-            <div class="tiles dark"></div>
-            <div class="tiles default"></div>
-          </div>
-        </div>
-      </div>
+     
       <div id="right-sidebar" class="settings-panel">
         <i class="settings-close typcn typcn-times"></i>
         <ul class="nav nav-tabs" id="setting-panel" role="tablist">
@@ -159,7 +142,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#coiffure" aria-expanded="false" aria-controls="charts">
-              <i class="typcn typcn-chart-pie-outline menu-icon"></i>
+              <i class="typcn typcn-scissors menu-icon"></i>
               <span class="menu-title">Coiffure</span>
               <i class="menu-arrow"></i>
             </a>
@@ -172,8 +155,8 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#clients" aria-expanded="false" aria-controls="tables">
-              <i class="typcn typcn-th-small-outline menu-icon"></i>
-              <span class="menu-title">Client</span>
+             <i class="typcn typcn-user"></i>
+              <span class="menu-title ml-2">Client</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="clients">
@@ -185,16 +168,22 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-              <i class="typcn typcn-compass menu-icon"></i>
-              <span class="menu-title">Types d'abonnement</span>
+              <i class="typcn typcn-tags"></i>
+              <span class="menu-title">Types d'abo</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="icons">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{ url_for('AddTypeAbonnement') }}">Ajouter un type abonnement </a></li>
-                <li class="nav-item"> <a class="nav-link" href="{{ url_for('ListTypeAbonnement') }}">Liste des types abonnements</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{ url_for('AddTypeAbonnement') }}">Ajouter </a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{ url_for('ListTypeAbonnement') }}">Liste des types</a></li>
               </ul>
             </div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('Galerie') }}">
+                <i class="typcn typcn-image menu-icon"></i>
+                <span class="menu-title">Galerie</span>
+              </a>
+            </li>
           </li>
           {% endif %}
           {% if current_user.is_authenticated and current_user.role.name == 'admin' %}
@@ -215,34 +204,47 @@
           {% if current_user.is_authenticated and current_user.role.name == 'caissier' %}
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('ListFacture') }}">
-              <i class="typcn typcn-mortar-board menu-icon"></i>
+              <i class="typcn typcn-document-text menu-icon"></i>
               <span class="menu-arrow">Liste Facture</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('AddFacture') }}">
-              <i class="typcn typcn-mortar-board menu-icon"></i>
+              <i class="typcn typcn-document-text menu-icon"></i>
               <span class="menu-arrow">Faire une facture </span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('VoirCaisse') }}">
-              <i class="typcn typcn-mortar-board menu-icon"></i>
+              <i class="typcn typcn-ticket menu-icon"></i>
               <span class="menu-title">Voir la caisse</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('list_ventes_produits') }}">
-              <i class="mdi mdi-basket"></i>
-              <span class="menu-title">Voir les ventes</span>
+              <i class="typcn typcn-th-list"></i>
+              <span class="menu-title ml-2">Voir les ventes</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('list_coiffures') }}">
-              <i class="mdi mdi-basket"></i>
+              <i class="typcn typcn-scissors menu-icon"></i>
               <span class="menu-title">Voir les prestations</span>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('AddPaiement') }}">
+              <i class="typcn typcn-document-text menu-icon"></i>
+              <span class="menu-arrow">Payer abonnement </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('ListPaiement') }}">
+              <i class="typcn typcn-document-text menu-icon"></i>
+              <span class="menu-arrow">Lister les abonnements </span>
+            </a>
+          </li>
+          
           {% endif %}
           
         </ul>
@@ -295,13 +297,12 @@
     <script src="{{ url_for('static', filename='template/vendors/js/vendor.bundle.base.js') }}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page-->
-    <script src="{{ url_for('static', filename='template/vendors/chart.js/Chart.min.js') }}"></script>
+
     <!-- End plugin js for this page-->
     <!-- inject:js -->
     <script src="{{ url_for('static', filename='template/js/off-canvas.js') }}"></script>
     <script src="{{ url_for('static', filename='template/js/hoverable-collapse.js') }}"></script>
     <script src="{{ url_for('static', filename='template/js/template.js') }}"></script>
-    <script src="{{ url_for('static', filename='template/js/settings.js') }}"></script>
     <script src="{{ url_for('static', filename='template/js/todolist.js') }}"></script>
     <!-- endinject -->
     <!-- Custom js for this page-->

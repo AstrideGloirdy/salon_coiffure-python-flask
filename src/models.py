@@ -71,6 +71,8 @@ class Abonnement(db.Model):
     type_abonnement_id = db.Column(db.Integer, db.ForeignKey('type_abonnement.id'), nullable=False)
     date_debut = db.Column(db.Date, nullable=False)
     date_fin = db.Column(db.Date, nullable=False)
+    is_paye = db.Column(db.Boolean, default=False)
+    is_valide = db.Column(db.Boolean, default=True)
     montant = db.Column(db.Float, nullable=False) 
     client = db.relationship('Client', backref='abonnements')
     type_abonnement = db.relationship('TypeAbonnement', backref='abonnements')
@@ -128,9 +130,17 @@ class Caisse(db.Model):
     montant_total = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
 
+class PaiementAbo(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    abonnement_id = db.Column(db.Integer, db.ForeignKey('abonnement.id'), nullable=False)
+    montant_paye = db.Column(db.Float, nullable=False)
+    montant_rendu = db.Column(db.Float, nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+    user = db.relationship("User", backref="paiement")
+    abonnement = db.relationship('Abonnement', backref='paiements')
 
-
-
+#Admin
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), unique=True, nullable=False)

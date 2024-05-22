@@ -24,7 +24,9 @@ class AddPaiementForm(FlaskForm):
 
 
 
-
+class AddPaiementAbo(FlaskForm):
+    client= SelectField('Coiffure',validators=[validators.Optional()])
+    submit = SubmitField('Ajouter')
 
 
 

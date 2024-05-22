@@ -1,33 +1,88 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="row">
+  <div class="row">
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Faire le paiement d'un abonnement</h4>
-                
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Faire le paiement d'un abonnement</h4>
+          <form method="POST">
+            {{ form.hidden_tag() }}
+              <div class="form-inline mt-2 mb-2">
+                <div class="form-group ">
+                    {{ form.client.label(class="form-control-label mb-2 mr-sm-2") }}
+                    {% if form.client.errors %}
+                        <ul class="errors">
+                            {% for error in form.client.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {{ form.client(class="form-control mb-2 mr-sm-2") }}
+                </div>
+                <div class="form-group ml-4 ">
+                  {{ form.submit(class="btn btn-primary") }}
+                </div>
+              </div>
+          </form>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-body">
+                    <table class="table  table-hover">
+                      <thead>
+                          <tr>
+                              <th>Montant</th>
+                              <th>coiffure</th>
+                              <th>Nbre de coiffure</th>
+                              <th>Taux de reduction</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% if abonnement %}
+                          <tr>
+                              <td>{{ abonnement.montant }} FCFA</td>
+                              <td>{{ abonnement.type_abonnement.coiffure.nom }}</td>
+                              <td>{{ abonnement.type_abonnement.nombre_coiffures_incluses }}</td>
+                              <td>{{ abonnement.type_abonnement.taux_reduction }} %</td>
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-19 ml-4 mt-2 mb-2">
+                      <div class="card">
+                          <div class="card-body">
+                              <h4 class="card-title ">Montant a payer </h4>
+                              <p class="text-success font-weight-bold ">{{ abonnement.montant }} FCFA</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              {% endif %}
+              <div class="row  ml-auto mr-3">
+              <div class="form-inline ">
+                  <div class="card">
+                      <div class="card-body">
+                          <form method="POST" class="form-inline " action="{{ url_for('AddPaiement') }}">
+                              <div class="form-group">
+                                  <label for="montant_paye">Montant payé :</label>
+                                  <input type="number" class="form-control ml-2" id="montant_paye" name="montant_paye" value="{{ montant_paye }}" required>
+                              </div>
+                              <button type="submit" class="btn btn-primary ml-3">Enregistrer</button>
+                          </form>
+                      </div>
+                  </div>
+              </div> 
+            </div>
         </div>
+      </div>
     </div>
-</div>
-
-
-
+    </div>
+  </div>
 
 
 {% endblock %}
 
-{% block javascript %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
-   
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        $('.js-example-basic-single').select2({
-          width: 'resolve'
-        });
-      });
-    </script>
-  
-{% endblock %}

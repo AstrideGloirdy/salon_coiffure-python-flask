@@ -1,0 +1,98 @@
+{% extends "layouts/base.html" %}
+<!-- Lister paiements  -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- <h4 class="card-title">Liste des paiements</h4>
+                <button type="button" class="btn btn-info float-right">Nouveau</button> -->
+                <div class="card-body d-flex align-items-center">
+                    <h4 class="card-title flex-grow-1">Liste des paiements d'abonnement</h4>
+                    <a href="{{ url_for('AddPaiement') }}" class="btn btn-info ml-auto">Nouveau</a>
+                </div>
+                
+                <div class="table-responsive mb-5">
+                  <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom du Caissier</th>
+                            <th>Nom du Client</th>
+                            <th>Montant Total</th>
+                            <th>Type d'abonnement</th>
+                            <th>Coiffure</th>
+                            <th>Date</th>
+                            <th>Heure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for paiement in paiements %}
+                        <tr>
+                           <td>{{paiement.id}}</td>
+                           <td>{{paiement.user.nom}} {{paiement.user.prenom}} </td>
+                           <td>{{paiement.abonnement.client.nom}} {{paiement.abonnement.client.prenom}} </td>
+                           <td>{{paiement.abonnement.montant }} FCFA</td>
+                           <td>{{paiement.abonnement.type_abonnement.nomTypeAbonnement }}</td>
+                           <td>{{paiement.abonnement.type_abonnement.coiffure.nom }}</td>
+                           <td>{{paiement.date.strftime('%d/%m/%Y') }}</td>
+                           <td>{{paiement.date.strftime('%H:%M:%S') }}</td>
+                           <td>
+                            <a href="{{ url_for('DetailPaiement', paiement_id=paiement.id) }}" class="btn btn-primary">
+                              Details
+                            </a>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                 <nav aria-label="Page navigation example mt-4">
+                    <ul class="pagination">
+                      {% if paiements.has_prev %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('Listpaiement', page=paiements.prev_num) }}">Previous</a></li>
+                      {% else %}
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                      {% endif %}
+                  
+                      {% for page_num in paiements.iter_pages() %}
+                        {% if page_num %}
+                          {% if paiements.page == page_num %}
+                            <li class="page-item active" aria-current="page"><span class="page-link">{{ page_num }}</span></li>
+                          {% else %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('Listpaiement', page=page_num) }}">{{ page_num }}</a></li>
+                          {% endif %}
+                        {% else %}
+                          <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                      {% endfor %}
+                  
+                      {% if paiements.has_next %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('Listpaiement', page=paiements.next_num) }}">Next</a></li>
+                      {% else %}
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                      {% endif %}
+                    </ul>
+                </nav> 
+                
+                
+            </div>
+            
+        
+        </div>
+    
+    </div>
+    
+      
+</div>
+
+    {% block javascript %}
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        
+    {% endblock %}
+
+
+{% endblock %}
+
+    
+    

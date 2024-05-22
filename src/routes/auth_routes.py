@@ -43,10 +43,6 @@ def login():
 
 
 
-@app.route('/dashboard', methods=['GET', 'POST'])
-@login_required
-def test():
-     return render_template('test.html')
 
 @app.route('/logout')
 @login_required
@@ -55,3 +51,18 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errors/error-404.html'), 404
+
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template('errors/error-403.html'), 403
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('errors/error-500.html'), 500
+
+@app.errorhandler(401)
+def unauthorized(e):
+    return render_template('errors/error-401.html'), 401

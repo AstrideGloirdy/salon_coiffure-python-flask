@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <title>Facture</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+
+    <!-- External CSS libraries -->
+    <link type="text/css" rel="stylesheet"  href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" >
+    <link type="text/css" rel="stylesheet"  href="{{ url_for('static', filename='assets/fonts/font-awesome/css/font-awesome.min.css') }}">
+
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/img/salon.ico') }}" type="image/x-icon" >
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Custom Stylesheet -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+
+</head>
+<body>
+
+<!-- Invoice 5 start -->
+<div class="invoice-5 invoice-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="invoice-inner clearfix">
+                    <div class="invoice-info clearfix" id="invoice_wrapper">
+                        <div class="invoice-contant">
+                            <div class="invoice-headar">
+                                <div class="row">
+                                    <div class="col-md-8 col-sm-6">
+                                        <div class="invoice-logo">
+                                            <!-- logo started -->
+                                            <div class="logo" style="display: inline-block;">
+                                                <img src="{{ url_for('static', filename='assets/img/logos/salon.png') }}" alt="logo">
+                                                <p class="name" style="display: inline-block;">AfroChic coiffure</p>
+                                            </div>
+                                            <!-- logo ended -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <div class="invoice-number-inner">
+                                            <h2 class="name">Facture Abonnement:<span>#000{{ paiement.id }}</span></h2>
+                                            <p class="mb-0"> Date :<span>{{ paiement.date.strftime(" %d %b %Y") }}</span></p>
+                                            <p class="mb-0"> Heure :<span>{{ paiement.date.strftime(" %H:%M") }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="invoice-top">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-6 mb-30">
+                                        <div class="invoice-number">
+                                            <h4 class="inv-title-1">Facture A</h4>
+                                            <h2 class="name mb-10">{{paiement.abonnement.client.nom}} {{paiement.abonnement.client.prenom}}</h2>
+                                            <p class="invo-addr-1 mb-0">
+                                                 {{paiement.abonnement.client.telephone}} <br/>
+                                                {{paiement.abonnement.client.adresse}}, Dakar <br/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 mb-30">
+                                        <div class="invoice-number">
+                                            <div class="invoice-number-inner">
+                                                <h4 class="inv-title-1">Facture faites par :</h4>
+                                                <h2 class="name mb-10">{{paiement.user.nom}} {{paiement.user.prenom}}</h2>
+                                                <p class="invo-addr-1 mb-0">
+                                                   {{paiement.user.login}} <br/>
+                                                   {{paiement.user.telephone}} <br/>
+                                                    {{paiement.user.adresse}}, Dakar <br/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 mb-30 invoice-contact-us">
+                                        <h4 class="inv-title-1">AfroChic Coiffure</h4>
+                                        <h2 class="name mb-10">Contactez-nous</h2>
+                                        <ul class="link">
+                                            <li>
+                                                <i class="fa fa-map-marker"></i> Point-E, Dakar
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-envelope"></i> <a href="mailto:sales@hotelempire.com">info@gestionSalon.com</a>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-phone"></i> <a href="tel:+55-417-634-7071">+221 123 64 84</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="invoice-center">
+                                <div class="order-summary">
+                                    <div class="table-outer">
+                                        <table class="default-table invoice-table text-center">
+                                            <thead>
+                                            <tr>
+                                                <th>Description</th>
+                                                <th>Debut</th>
+                                                <th>Fin</th>
+                                                <th>Total</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                
+                                                <tr>
+                                                    <td>{{paiement.abonnement.type_abonnement.nomTypeAbonnement}}</td>
+                                                    <td>{{paiement.abonnement.date_debut.strftime('%d/%m/%Y')}}</td>
+                                                    <td>{{paiement.abonnement.date_fin.strftime('%d/%m/%Y')}}</td>
+                                                    <td>{{paiement.abonnement.montant}} FCFA</td>
+                                                    
+                                                </tr>
+                                                
+                                            <tr>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td><strong>Montant total</strong></td>
+                                               
+                                                <td><strong>{{ paiement.abonnement.montant }} FCFA </strong></td>
+                                            </tr>
+                                            <tr>
+                                                
+                                                <td></td>
+                                                <td></td>
+                                                <td><strong>Montant paye</strong></td>
+                                                
+                                                <td><strong>{{ paiement.montant_paye }} FCFA</strong></td>
+                                            </tr>
+                                            <tr>
+                                                
+                                                <td></td>
+                                                <td></td>
+                                                <td><strong>Montant restant</strong></td>
+                                               
+                                                <td><strong>{{ paiement.montant_rendu }} FCFA </strong></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="invoice-bottom">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-7 col-sm-7">
+                                        <div class="terms-conditions mb-30">
+                                            <h3 class="inv-title-1 mb-10"> Cher client,</h3>
+                                             Nous vous prions donc de vérifier attentivement la monnaie, le reçu et les abonnements ne sont pas annuables une fois payés. 
+                                             Merci de votre compréhension.
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-5 col-sm-5">
+                                        <div class="payment-method mb-30">
+                                            <h3 class="inv-title-1 mb-10">Méthode de Paiement </h3>
+                                            <ul class="payment-method-list-1 text-14">
+                                                <li><strong>Le paiement s'effectue uniquement en espèces.</li>
+                                                <li><strong>Merci d'avoir choisie </strong> AfroChic Coiffure</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="invoice-btn-section clearfix d-print-none">
+                        <a id="invoice_download_btn" class="btn btn-lg btn-download btn-theme">
+                            <i class="fa fa-download"></i> Telecharger la facture 
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Invoice 5 end -->
+
+<script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/jspdf.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/html2canvas.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/app.js') }}"></script>
+</body>
+</html>

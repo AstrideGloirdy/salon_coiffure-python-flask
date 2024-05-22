@@ -36,7 +36,7 @@ def ListerArticle():
 
 @app.route('/Galerie',methods=['GET','POST'])
 @login_required
-def Galery():
+def Galerie():
     produits = Produit.query.all()
     return render_template('gestionnaire/article/Galerie.html', produits=produits)
 
@@ -317,7 +317,7 @@ def print_abonnement(id):
     pdf_bytes = HTML(string=rendered_template).write_pdf(
         stylesheets=[CSS(string='@page { size: A3 ; }')]
     )
-     # Obtenir la date et l'heure actuelles
+    
     now = datetime.now()
     date_str = now.strftime("%Y-%m-%d_%H-%M-%S")
 
@@ -328,7 +328,6 @@ def print_abonnement(id):
     # Chemin relatif pour enregistrer le PDF
     pdf_path = os.path.join(os.getcwd(), filename)
     
-
     # Enregistrer le PDF 
     with open(pdf_path, "wb") as f:
         f.write(pdf_bytes)
@@ -336,7 +335,6 @@ def print_abonnement(id):
     # avec as_attachment a true ,il telecharge directement le fichier si a false 
     # le fichier est d'abord visionner par le navigateur et on peut l'imprimer ou l'enregistrer en pdf 
     return send_file(pdf_path, as_attachment=True) 
-
 
 
 
