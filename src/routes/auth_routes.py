@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template, redirect, session,url_for, request,flash
+from flask import Blueprint, render_template, redirect, session,url_for, request
 from flask_login import login_user, logout_user, login_required,current_user,LoginManager
 from ..models import User,app
-from .gestionnaire_routes import ListerArticle
 from ..forms.SecurityForms import LoginForm
 from flask_bcrypt import Bcrypt 
 
@@ -35,9 +34,7 @@ def login():
                     return redirect(url_for('ListFacture'))
                 elif user.role.name == 'gestionnaire':
                     return redirect(url_for('ListerArticle'))
-                # Ajoutez d'autres conditions pour d'autres rôles si nécessaire
             else:
-                flash('Nom d\'utilisateur ou mot de passe incorrect.', 'error')
                 return redirect(url_for('login'))
     return render_template('security/connexion.html', form=form)
 

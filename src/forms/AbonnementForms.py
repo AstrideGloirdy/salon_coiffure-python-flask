@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import DateField, SelectField, StringField
+from wtforms import SelectField
 from wtforms.validators import DataRequired
 from ..models import Client, TypeAbonnement
 

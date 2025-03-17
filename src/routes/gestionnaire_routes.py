@@ -12,7 +12,6 @@ from ..fileManager import save_uploaded_file
 from flask_weasyprint import HTML,CSS  
 from flask import send_file
 from ..models import app
-from .Security import gestionnaire_required
 from .auth_routes import login_required
 import os
 
@@ -24,13 +23,13 @@ import os
 @login_required
 def ListerArticle():
     form = SearchForm()
-    page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
+    page = request.args.get('page', 1, type=int)  
     if form.validate_on_submit():
         search_query = form.search_query.data
         produits = Produit.query.filter(Produit.nom.ilike(f'%{search_query}%')).paginate(page=page, per_page=5)
     else:
-        produits = Produit.query.paginate(page=page, per_page=5)
-    appro_form = ApprovisionnementForm()  # Initialiser le formulaire d'approvisionnement
+        produits = Produit.query.paginate(page=page, per_page=7)
+    appro_form = ApprovisionnementForm()  
     return render_template('gestionnaire/article/ListerArticle.html', produits=produits,form=form,appro_form=appro_form)
 
 @app.route('/Galerie',methods=['GET','POST'])
@@ -65,7 +64,6 @@ def AddArticle():
 def EditArticle(produit_id):
     produit = Produit.query.get_or_404(produit_id)
     form = EditArticleForm(obj=produit) # charger l'objet  correspondant
-     # Charger les catégories disponibles dans le formulaire
     form.categorie.choices = [(categorie.id, categorie.nom) for categorie in Categorie.query.all()]
     if form.validate_on_submit():
         if form.nom.data != produit.nom or form.prix.data != produit.prix or form.categorie.data != produit.categorie_id:
@@ -116,7 +114,7 @@ def AproArticle(produit_id):
 @app.route('/Article/Approvisionnement/List',methods=['GET', 'POST'])
 @login_required
 def ListApro():
-    page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
+    page = request.args.get('page', 1, type=int)  
     apros = Approvisionnement.query.paginate(page=page, per_page=5)
     
     return render_template('gestionnaire/article/ListApro.html', apros=apros)
@@ -144,7 +142,7 @@ def ListerCategorie():
 @login_required
 def ListClient():
     form = SearchForm()
-    page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
+    page = request.args.get('page', 1, type=int)  
     if form.validate_on_submit():
         search_query = form.search_query.data
         clients = Client.query.filter(or_(Client.nom.ilike(f'%{search_query}%'), Client.prenom.ilike(f'%{search_query}%'))).paginate(page=page, per_page=5)
@@ -196,7 +194,7 @@ def DeleteClient(client_id):
 @login_required
 def ListCoiffure():
     form = SearchForm()
-    page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
+    page = request.args.get('page', 1, type=int) 
     if form.validate_on_submit():
         search_query = form.search_query.data
         print("Mot recherché :", search_query)
@@ -246,8 +244,8 @@ def DeleteCoiffure(coiffure_id):
 @app.route('/Abonnement/Type/List')
 @login_required
 def ListTypeAbonnement():
-    page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
-    abonnements = TypeAbonnement.query.paginate(page=page, per_page=5)  # Paginer les résultats, 10 éléments par page
+    page = request.args.get('page', 1, type=int) 
+    abonnements = TypeAbonnement.query.paginate(page=page, per_page=9)  
     return render_template('gestionnaire/typeAbonnement/ListTypeAbonnement.html', abonnements=abonnements)
 
 
@@ -276,8 +274,8 @@ def AddTypeAbonnement():
 @app.route('/Abonnement/List')
 @login_required
 def ListAbonnement():
-    page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
-    abonnements = Abonnement.query.paginate(page=page, per_page=5)  # Paginer les résultats, 10 éléments par page
+    page = request.args.get('page', 1, type=int)  
+    abonnements = Abonnement.query.paginate(page=page, per_page=5)  
     return render_template('gestionnaire/abonnement/ListAbonnement.html', abonnements=abonnements)
 
 

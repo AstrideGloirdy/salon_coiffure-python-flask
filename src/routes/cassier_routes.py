@@ -10,7 +10,7 @@ from datetime import datetime
 @app.route('/Cassierhome')
 @login_required
 def ListFacture():
-    page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
+    page = request.args.get('page', 1, type=int)  
     factures = Facture.query.paginate(page=page, per_page=10) 
     return render_template('caissier/facture/ListFacture.html',factures=factures)
 
@@ -202,7 +202,7 @@ def DetailPaiement(paiement_id):
 @app.route('/Caisse/')
 @login_required
 def VoirCaisse():
-    page = request.args.get('page', 1, type=int)  # Récupérer le numéro de page depuis les paramètres de requête, par défaut 1
+    page = request.args.get('page', 1, type=int)  
     caisses = Caisse.query.paginate(page=page, per_page=10)
     total_caisse = sum(caisse.montant_total for caisse in caisses.items) 
     return render_template('caissier/caisse/VoirCaisse.html',caisses=caisses,total_caisse=total_caisse)
@@ -213,7 +213,7 @@ def VoirCaisse():
 @login_required
 def list_ventes_produits():
     page = request.args.get('page', 1, type=int)
-    per_page = 2  
+    per_page = 5  
     produits_query = db.session.query(DetailsFacture).filter(DetailsFacture.produit_id.isnot(None)).join(Facture).order_by(Facture.date.desc())
     produits_paginated = produits_query.paginate(page=page, per_page=per_page)
     produits = produits_paginated.items
@@ -224,7 +224,7 @@ def list_ventes_produits():
 @login_required
 def list_coiffures():
     page = request.args.get('page', 1, type=int)
-    per_page = 3  # Nombre d'éléments par page
+    per_page = 5 
     coiffures_query = db.session.query(DetailsFacture).filter(DetailsFacture.coiffure_id.isnot(None)).join(Facture).order_by(Facture.date.desc())
     coiffures_paginated = coiffures_query.paginate(page=page, per_page=per_page)
     coiffures = coiffures_paginated.items

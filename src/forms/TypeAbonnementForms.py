@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,IntegerField,SelectField,FileField,TextAreaField
+from wtforms import StringField,IntegerField,SelectField
 from wtforms.validators import DataRequired, NumberRange,Length,InputRequired
-from flask_wtf.file import FileAllowed, FileSize
 
 class AddTypeAbonnementForm(FlaskForm):
     nom = StringField(

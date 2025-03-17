@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,IntegerField,SelectField,FileField, SubmitField,TextAreaField,FloatField
-from wtforms.validators import DataRequired, NumberRange,Length,InputRequired
+from wtforms import StringField,SubmitField,FloatField
+from wtforms.validators import DataRequired, NumberRange,Length
 
 
 class AddCoiffureForm(FlaskForm):

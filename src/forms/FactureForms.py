@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import DateField, FieldList, IntegerField, SelectField,FloatField, SelectMultipleField, StringField,DecimalField, SubmitField,validators
+from wtforms import IntegerField, SelectField,FloatField, SubmitField,validators
 from wtforms.validators import DataRequired,InputRequired
-from ..models import Client, Abonnement
 
 
 class AddFactureForm(FlaskForm):
